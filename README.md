@@ -29,6 +29,7 @@
 
 - [docs/research/current-practices.md](docs/research/current-practices.md)
 - [docs/research/community-operating-patterns.md](docs/research/community-operating-patterns.md)
+- [docs/research/andrej-karpathy-llm-wiki.md](docs/research/andrej-karpathy-llm-wiki.md)
 - [docs/architecture/reference-architecture.md](docs/architecture/reference-architecture.md)
 - [docs/architecture/platform-landing-review.md](docs/architecture/platform-landing-review.md)
 - [docs/implementation/obsidian-kb-sop.md](docs/implementation/obsidian-kb-sop.md)

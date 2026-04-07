@@ -2,55 +2,77 @@
   "lanes": [
     {
       "class_name": "standard",
-      "title": "标准路径",
-      "subtitle": "大部分新信息都走这条",
+      "title": "写入流",
+      "subtitle": "新信息怎么变成稳定内容",
       "steps": [
         {
           "index": "1",
-          "title": "写进 Capture",
-          "body": "daily / inbox / raw import"
+          "title": "进入 Capture",
+          "body": "user input / platform note / raw import"
         },
         {
           "index": "2",
           "title": "Consolidate",
-          "body": "整理成 profile / project / decision / topic / procedure"
+          "body": "判断是 profile / project / decision / topic / procedure，还是丢弃 / 归档"
         },
         {
           "index": "3",
-          "title": "更新 Store",
-          "body": "当前有效状态在这里固定下来"
+          "title": "写入 Store",
+          "body": "稳定、当前有效的内容在这里固定下来"
         },
         {
           "index": "4",
           "title": "Project",
-          "body": "刷新平台侧文件和摘要"
+          "body": "从 Store 刷新各平台 projection"
         }
       ]
     },
     {
       "class_name": "hotfix",
-      "title": "Same-day correction",
-      "subtitle": "今天就要生效的规则走这条",
+      "title": "使用流",
+      "subtitle": "平台平时实际读什么",
       "steps": [
         {
           "index": "1",
-          "title": "建 correction item",
-          "body": "写 targets、expires_at、status"
+          "title": "平台读入口文件",
+          "body": "Claude 读 CLAUDE.md，OpenClaw 读 MEMORY.md，Codex 读 AGENTS.md，ChatGPT 读你送进去的 summary"
         },
         {
           "index": "2",
-          "title": "立即刷新目标平台",
-          "body": "Claude / OpenClaw / Codex 可当天用上"
+          "title": "agent 开始工作",
+          "body": "Phase 1 默认先用 projection，不假设平台会自动读本地 Store"
         },
         {
           "index": "3",
-          "title": "晚些时候再 Consolidate",
-          "body": "并进 Store，然后关闭 inbox item"
+          "title": "需要更深内容时再显式取",
+          "body": "本地平台可额外打开相关文件或走 MCP；ChatGPT 默认做不到这一步"
+        }
+      ]
+    },
+    {
+      "class_name": "standard",
+      "title": "回流",
+      "subtitle": "平台上的新结论怎么回主库",
+      "steps": [
+        {
+          "index": "1",
+          "title": "平台侧产生新规则",
+          "body": "比如在 Claude Code 里确认“每节保留 1 个例子”"
+        },
+        {
+          "index": "2",
+          "title": "回写 Capture",
+          "body": "先记成 correction item 或 daily note，不直接覆盖 Store"
+        },
+        {
+          "index": "3",
+          "title": "需要当天生效时先补 projection",
+          "body": "只刷新目标平台入口，不等晚上统一整理"
         },
         {
           "index": "4",
-          "title": "重新 Project",
-          "body": "让 hot fix 变成长期稳定状态"
+          "title": "再 Consolidate + Project",
+          "body": "晚些时候并进 Store，再统一刷新所有相关 projections"
         }
       ]
     }

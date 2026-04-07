@@ -2,7 +2,7 @@
 ## items
 - System | #system
 - Routing | #routing
-- Runtime | #runtime
+- Flows | #runtime
 - Platforms | #platforms
 - Example | #example
 
@@ -30,13 +30,13 @@ System Map
 整体架构图
 
 ## lead
-这套系统只保留三个结构块。平台侧改动可以回流，但不直接改主库。
+这套系统只保留三个结构块。真正的数据流要分成写入、使用、回流三条线来看。
 
 ## feedback_label
 回流规则
 
 ## feedback_text
-平台侧确认的新规则或热修正 **先回到 Capture**，再做 Consolidate 并进 Store，最后重新生成 Projections。
+平台侧确认的新规则或热修正 **先回到 Capture**。Store 还是唯一真相源，Projections 只是派生视图。
 
 # routing
 ## eyebrow
@@ -46,17 +46,17 @@ Routing
 什么东西该放哪
 
 ## lead
-这块不是知识分类，而是运行时分流规则。看一条信息最终落到哪里。
+这块只回答一件事：一条新信息先落在哪里，稳定后又归到哪里。
 
 # runtime
 ## eyebrow
-Runtime
+Flows
 
 ## title
-运行流程图
+数据流
 
 ## lead
-标准路径和 same-day correction 不是一条流程。要分开看。
+当前页面最容易讲混的地方就在这里：结构是三块，流有三条，不能混着看。
 
 # platforms
 ## eyebrow

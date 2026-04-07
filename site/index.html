@@ -23,7 +23,7 @@
           <div class="topbar-links">
             <a href="#system">System</a>
 <a href="#routing">Routing</a>
-<a href="#runtime">Runtime</a>
+<a href="#runtime">Flows</a>
 <a href="#platforms">Platforms</a>
 <a href="#example">Example</a>
           </div>
@@ -64,7 +64,7 @@
           <div class="section-heading">
             <p class="eyebrow">System Map</p>
             <h2>整体架构图</h2>
-            <p>这套系统只保留三个结构块。平台侧改动可以回流，但不直接改主库。</p>
+            <p>这套系统只保留三个结构块。真正的数据流要分成写入、使用、回流三条线来看。</p>
           </div>
 
           <div class="diagram-frame system-map">
@@ -134,7 +134,7 @@
 
           <div class="feedback-band">
             <div class="feedback-label">回流规则</div>
-            <p>平台侧确认的新规则或热修正 <strong>先回到 Capture</strong>，再做 Consolidate 并进 Store，最后重新生成 Projections。</p>
+            <p>平台侧确认的新规则或热修正 <strong>先回到 Capture</strong>。Store 还是唯一真相源，Projections 只是派生视图。</p>
           </div>
         </section>
 
@@ -142,7 +142,7 @@
           <div class="section-heading">
             <p class="eyebrow">Routing</p>
             <h2>什么东西该放哪</h2>
-            <p>这块不是知识分类，而是运行时分流规则。看一条信息最终落到哪里。</p>
+            <p>这块只回答一件事：一条新信息先落在哪里，稳定后又归到哪里。</p>
           </div>
 
           <div class="diagram-frame">
@@ -173,71 +173,96 @@
 
         <section id="runtime" class="section">
           <div class="section-heading">
-            <p class="eyebrow">Runtime</p>
-            <h2>运行流程图</h2>
-            <p>标准路径和 same-day correction 不是一条流程。要分开看。</p>
+            <p class="eyebrow">Flows</p>
+            <h2>数据流</h2>
+            <p>当前页面最容易讲混的地方就在这里：结构是三块，流有三条，不能混着看。</p>
           </div>
 
           <div class="runtime-grid">
             <div class="flow-lane standard-lane">
               <div class="lane-head">
-                <h3>标准路径</h3>
-                <p>大部分新信息都走这条</p>
+                <h3>写入流</h3>
+                <p>新信息怎么变成稳定内容</p>
               </div>
               <div class="flow-step">
                   <span>1</span>
                   <div>
-                    <h4>写进 Capture</h4>
-                    <p>daily / inbox / raw import</p>
+                    <h4>进入 Capture</h4>
+                    <p>user input / platform note / raw import</p>
                   </div>
                 </div> <div class="lane-arrow"></div> <div class="flow-step">
                   <span>2</span>
                   <div>
                     <h4>Consolidate</h4>
-                    <p>整理成 profile / project / decision / topic / procedure</p>
+                    <p>判断是 profile / project / decision / topic / procedure，还是丢弃 / 归档</p>
                   </div>
                 </div> <div class="lane-arrow"></div> <div class="flow-step">
                   <span>3</span>
                   <div>
-                    <h4>更新 Store</h4>
-                    <p>当前有效状态在这里固定下来</p>
+                    <h4>写入 Store</h4>
+                    <p>稳定、当前有效的内容在这里固定下来</p>
                   </div>
                 </div> <div class="lane-arrow"></div> <div class="flow-step">
                   <span>4</span>
                   <div>
                     <h4>Project</h4>
-                    <p>刷新平台侧文件和摘要</p>
+                    <p>从 Store 刷新各平台 projection</p>
                   </div>
                 </div>
             </div>
 <div class="flow-lane hotfix-lane">
               <div class="lane-head">
-                <h3>Same-day correction</h3>
-                <p>今天就要生效的规则走这条</p>
+                <h3>使用流</h3>
+                <p>平台平时实际读什么</p>
               </div>
               <div class="flow-step">
                   <span>1</span>
                   <div>
-                    <h4>建 correction item</h4>
-                    <p>写 targets、expires_at、status</p>
+                    <h4>平台读入口文件</h4>
+                    <p>Claude 读 CLAUDE.md，OpenClaw 读 MEMORY.md，Codex 读 AGENTS.md，ChatGPT 读你送进去的 summary</p>
                   </div>
                 </div> <div class="lane-arrow"></div> <div class="flow-step">
                   <span>2</span>
                   <div>
-                    <h4>立即刷新目标平台</h4>
-                    <p>Claude / OpenClaw / Codex 可当天用上</p>
+                    <h4>agent 开始工作</h4>
+                    <p>Phase 1 默认先用 projection，不假设平台会自动读本地 Store</p>
                   </div>
                 </div> <div class="lane-arrow"></div> <div class="flow-step">
                   <span>3</span>
                   <div>
-                    <h4>晚些时候再 Consolidate</h4>
-                    <p>并进 Store，然后关闭 inbox item</p>
+                    <h4>需要更深内容时再显式取</h4>
+                    <p>本地平台可额外打开相关文件或走 MCP；ChatGPT 默认做不到这一步</p>
+                  </div>
+                </div>
+            </div>
+<div class="flow-lane standard-lane">
+              <div class="lane-head">
+                <h3>回流</h3>
+                <p>平台上的新结论怎么回主库</p>
+              </div>
+              <div class="flow-step">
+                  <span>1</span>
+                  <div>
+                    <h4>平台侧产生新规则</h4>
+                    <p>比如在 Claude Code 里确认“每节保留 1 个例子”</p>
+                  </div>
+                </div> <div class="lane-arrow"></div> <div class="flow-step">
+                  <span>2</span>
+                  <div>
+                    <h4>回写 Capture</h4>
+                    <p>先记成 correction item 或 daily note，不直接覆盖 Store</p>
+                  </div>
+                </div> <div class="lane-arrow"></div> <div class="flow-step">
+                  <span>3</span>
+                  <div>
+                    <h4>需要当天生效时先补 projection</h4>
+                    <p>只刷新目标平台入口，不等晚上统一整理</p>
                   </div>
                 </div> <div class="lane-arrow"></div> <div class="flow-step">
                   <span>4</span>
                   <div>
-                    <h4>重新 Project</h4>
-                    <p>让 hot fix 变成长期稳定状态</p>
+                    <h4>再 Consolidate + Project</h4>
+                    <p>晚些时候并进 Store，再统一刷新所有相关 projections</p>
                   </div>
                 </div>
             </div>
