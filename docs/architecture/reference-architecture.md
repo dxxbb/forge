@@ -1,5 +1,13 @@
 # Reference Architecture
 
+补充说明：
+
+- 这篇文档保留的是较早的 Phase 1 参考形态
+- 如果要看当前主方案，请优先看：
+- [solution-design.md](/Users/dxy-air/workspace/projects/memory_system/docs/architecture/solution-design.md)
+- 如果要看 `2026-04-09` 这轮 practitioner research 之后的重设计过程，请看：
+- [reframed-architecture.md](/Users/dxy-air/workspace/projects/memory_system/docs/architecture/reframed-architecture.md)
+
 ## 1. 目标
 
 这个项目 Phase 1 要做成下面这个形态：

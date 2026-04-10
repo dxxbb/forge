@@ -12,16 +12,21 @@
         },
         {
           "index": "2",
-          "title": "Consolidate",
-          "body": "判断是 profile / project / decision / topic / procedure，还是丢弃 / 归档"
+          "title": "进入 Workspace",
+          "body": "先整理成 candidate summary、review draft、临时工作页"
         },
         {
           "index": "3",
+          "title": "Review / Promote",
+          "body": "确认哪些内容值得进入长期主库"
+        },
+        {
+          "index": "4",
           "title": "写入 Store",
           "body": "稳定、当前有效的内容在这里固定下来"
         },
         {
-          "index": "4",
+          "index": "5",
           "title": "Project",
           "body": "从 Store 刷新各平台 projection"
         }
@@ -62,15 +67,20 @@
         {
           "index": "2",
           "title": "回写 Capture",
-          "body": "先记成 correction item 或 daily note，不直接覆盖 Store"
+          "body": "先记成 feedback item 或 daily note，不直接覆盖 Store"
         },
         {
           "index": "3",
+          "title": "进入 Workspace",
+          "body": "先形成 review draft，再决定是否 promote"
+        },
+        {
+          "index": "4",
           "title": "需要当天生效时先补 projection",
           "body": "只刷新目标平台入口，不等晚上统一整理"
         },
         {
-          "index": "4",
+          "index": "5",
           "title": "再 Consolidate + Project",
           "body": "晚些时候并进 Store，再统一刷新所有相关 projections"
         }

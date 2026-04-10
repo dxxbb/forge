@@ -6,7 +6,7 @@
     <title>Personal Memory System</title>
     <meta
       name="description"
-      content="Capture, Store, Projections. A visual architecture page for the Personal Memory System."
+      content="Capture, Workspace, Store, Projections. A visual architecture page for the Personal Memory System."
     />
     <link rel="icon" href="./favicon.svg" type="image/svg+xml" />
     <link rel="stylesheet" href="./styles.css" />
@@ -32,7 +32,7 @@
         <div class="hero-card">
           <div class="hero-copy">
             <p class="eyebrow">All-in-one architecture page</p>
-            <h1>Capture, Store, Projections.</h1>
+            <h1>Capture, Workspace, Store, Projections.</h1>
             <p class="hero-text">这个页面只负责一件事：把 Markdown 文档里不容易讲清楚的结构、流程、分流和回流，用图的方式讲明白。</p>
             <div class="hero-actions">
               <a class="button button-primary" href="#system">看整体架构</a>
@@ -45,10 +45,15 @@
               <h2>Capture</h2>
               <p>daily / inbox / raw input</p>
             </div>
-<div class="hero-arrow">Consolidate</div>
+<div class="hero-arrow">Prepare</div>
+<div class="hero-node workspace">
+              <h2>Workspace</h2>
+              <p>candidate / generated / review / promote</p>
+            </div>
+<div class="hero-arrow">Promote</div>
 <div class="hero-node store">
               <h2>Store</h2>
-              <p>profile / project / decision / topic / procedure / lesson</p>
+              <p>evidence / knowledge / state</p>
             </div>
 <div class="hero-arrow">Project</div>
 <div class="hero-node projection">
@@ -64,7 +69,7 @@
           <div class="section-heading">
             <p class="eyebrow">System Map</p>
             <h2>整体架构图</h2>
-            <p>这套系统只保留三个结构块。真正的数据流要分成写入、使用、回流三条线来看。</p>
+            <p>这套系统保留四个结构块。真正的数据流要分成写入、使用、回流三条线来看。</p>
           </div>
 
           <div class="diagram-frame system-map">
@@ -78,30 +83,47 @@
                 <div class="chip-cloud">
                   <span>daily</span>
 <span>inbox</span>
-<span>raw notes</span>
-<span>same-day correction</span>
+<span>imports</span>
+<span>feedback</span>
                 </div>
               </div>
             </div>
 
             <div class="flow-bridge">
-              <span>Consolidate</span>
+              <span>Prepare</span>
+            </div>
+
+            <div class="system-column">
+              <div class="diagram-box workspace-box">
+                <div class="diagram-title">
+                  <span class="diagram-index">02</span>
+                  <h3>Workspace</h3>
+                </div>
+                <p class="diagram-copy">generated / candidate / review 中的内容先待在这里。</p>
+                <div class="chip-cloud">
+                  <span>candidates</span>
+<span>reviews</span>
+<span>promote</span>
+<span>ephemeral</span>
+                </div>
+              </div>
+            </div>
+
+            <div class="flow-bridge">
+              <span>Promote</span>
             </div>
 
             <div class="system-column">
               <div class="diagram-box store-box">
                 <div class="diagram-title">
-                  <span class="diagram-index">02</span>
+                  <span class="diagram-index">03</span>
                   <h3>Store</h3>
                 </div>
                 <p class="diagram-copy">唯一真相源。稳定、当前有效、可持续维护。</p>
                 <div class="chip-cloud">
-                  <span>profile</span>
-<span>project</span>
-<span>decision</span>
-<span>topic</span>
-<span>procedure</span>
-<span>lesson</span>
+                  <span>evidence</span>
+<span>knowledge</span>
+<span>state</span>
                 </div>
               </div>
             </div>
@@ -142,30 +164,35 @@
           <div class="section-heading">
             <p class="eyebrow">Routing</p>
             <h2>什么东西该放哪</h2>
-            <p>这块只回答一件事：一条新信息先落在哪里，稳定后又归到哪里。</p>
+            <p>这块只回答一件事：一条新信息先落在哪里、先在哪加工、最后怎么进主库。</p>
           </div>
 
           <div class="diagram-frame">
             <div class="routing-table">
               <div class="routing-head">输入类型</div>
 <div class="routing-head">先去哪</div>
-<div class="routing-head">稳定后去哪</div>
+<div class="routing-head">加工后去哪</div>
+<div class="routing-head">确认后去哪</div>
 <div class="routing-head">平台处理</div>
 <div class="routing-cell strong">今天先别写太长</div>
-<div class="routing-cell">Capture</div>
+<div class="routing-cell">Capture / feedback</div>
+<div class="routing-cell">Workspace / review</div>
 <div class="routing-cell muted">可能不过夜，不进 Store</div>
 <div class="routing-cell">只刷新目标平台 projection</div>
 <div class="routing-cell strong">文档每节保留 1 个例子</div>
-<div class="routing-cell">Capture</div>
-<div class="routing-cell">Store / profile</div>
+<div class="routing-cell">Capture / feedback</div>
+<div class="routing-cell">Workspace / promote</div>
+<div class="routing-cell">Store / state / profile</div>
 <div class="routing-cell">Claude / OpenClaw / Codex 同天更新</div>
 <div class="routing-cell strong">Phase 1 先做 knowledge base</div>
-<div class="routing-cell">Capture</div>
-<div class="routing-cell">Store / decision</div>
+<div class="routing-cell">Capture / inbox</div>
+<div class="routing-cell">Workspace / promote</div>
+<div class="routing-cell">Store / state / decision</div>
 <div class="routing-cell">投影进项目文件和平台入口</div>
 <div class="routing-cell strong">目录树是骨架，链接是增强层</div>
-<div class="routing-cell">Capture</div>
-<div class="routing-cell">Store / topic</div>
+<div class="routing-cell">Capture / inbox</div>
+<div class="routing-cell">Workspace / candidates</div>
+<div class="routing-cell">Store / knowledge / topic</div>
 <div class="routing-cell">按需进入各平台 projection</div>
             </div>
           </div>
@@ -175,7 +202,7 @@
           <div class="section-heading">
             <p class="eyebrow">Flows</p>
             <h2>数据流</h2>
-            <p>当前页面最容易讲混的地方就在这里：结构是三块，流有三条，不能混着看。</p>
+            <p>当前页面最容易讲混的地方就在这里：结构是四块，流有三条，不能混着看。</p>
           </div>
 
           <div class="runtime-grid">
@@ -193,17 +220,23 @@
                 </div> <div class="lane-arrow"></div> <div class="flow-step">
                   <span>2</span>
                   <div>
-                    <h4>Consolidate</h4>
-                    <p>判断是 profile / project / decision / topic / procedure，还是丢弃 / 归档</p>
+                    <h4>进入 Workspace</h4>
+                    <p>先整理成 candidate summary、review draft、临时工作页</p>
                   </div>
                 </div> <div class="lane-arrow"></div> <div class="flow-step">
                   <span>3</span>
+                  <div>
+                    <h4>Review / Promote</h4>
+                    <p>确认哪些内容值得进入长期主库</p>
+                  </div>
+                </div> <div class="lane-arrow"></div> <div class="flow-step">
+                  <span>4</span>
                   <div>
                     <h4>写入 Store</h4>
                     <p>稳定、当前有效的内容在这里固定下来</p>
                   </div>
                 </div> <div class="lane-arrow"></div> <div class="flow-step">
-                  <span>4</span>
+                  <span>5</span>
                   <div>
                     <h4>Project</h4>
                     <p>从 Store 刷新各平台 projection</p>
@@ -250,16 +283,22 @@
                   <span>2</span>
                   <div>
                     <h4>回写 Capture</h4>
-                    <p>先记成 correction item 或 daily note，不直接覆盖 Store</p>
+                    <p>先记成 feedback item 或 daily note，不直接覆盖 Store</p>
                   </div>
                 </div> <div class="lane-arrow"></div> <div class="flow-step">
                   <span>3</span>
+                  <div>
+                    <h4>进入 Workspace</h4>
+                    <p>先形成 review draft，再决定是否 promote</p>
+                  </div>
+                </div> <div class="lane-arrow"></div> <div class="flow-step">
+                  <span>4</span>
                   <div>
                     <h4>需要当天生效时先补 projection</h4>
                     <p>只刷新目标平台入口，不等晚上统一整理</p>
                   </div>
                 </div> <div class="lane-arrow"></div> <div class="flow-step">
-                  <span>4</span>
+                  <span>5</span>
                   <div>
                     <h4>再 Consolidate + Project</h4>
                     <p>晚些时候并进 Store，再统一刷新所有相关 projections</p>
@@ -315,13 +354,21 @@
             <div class="example-column">
               <div class="example-head">Step 1</div>
               <h3>Capture</h3>
-              <code>kb/inbox/2026-04-03-writing-style.md</code>
-<code>kb/daily/2026-04-03.md</code>
-              <p>先记 correction item，再在 daily 里留下候选决策。</p>
+              <code>capture/feedback/2026-04-03-writing-style.md</code>
+<code>capture/daily/2026-04-03.md</code>
+              <p>先记 feedback item，再在 daily 里留下当天记录。</p>
+            </div>
+<div class="example-bridge">review</div>
+<div class="example-column">
+              <div class="example-head">Step 2</div>
+              <h3>Workspace</h3>
+              <code>workspace/reviews/user-writing-preferences.md</code>
+<code>workspace/promote/phase-1-kb-first.md</code>
+              <p>先生成候选整理稿，等人 review 后再 promote。</p>
             </div>
 <div class="example-bridge">same day</div>
 <div class="example-column">
-              <div class="example-head">Step 2</div>
+              <div class="example-head">Step 3</div>
               <h3>Projections</h3>
               <code>projections/claude/CLAUDE.memory.md</code>
 <code>projections/openclaw/MEMORY.md</code>
@@ -331,12 +378,12 @@
             </div>
 <div class="example-bridge">later</div>
 <div class="example-column">
-              <div class="example-head">Step 3</div>
+              <div class="example-head">Step 4</div>
               <h3>Store</h3>
-              <code>kb/profile/user.md</code>
-<code>kb/decisions/phase-1-kb-first.md</code>
-<code>kb/projects/personal-memory-system.md</code>
-              <p>晚些时候再 Consolidate，把规则写进 Store，关闭 inbox item。</p>
+              <code>store/state/profile/user-writing-preferences.md</code>
+<code>store/state/decisions/phase-1-kb-first.md</code>
+<code>store/state/projects/personal-memory-system.md</code>
+              <p>晚些时候再 Consolidate，把规则写进主库，关闭 feedback item。</p>
             </div>
           </div>
         </section>
@@ -351,7 +398,7 @@
           <div class="build-rails">
             <div class="build-track">
               <h3>Phase 1</h3>
-              <p>Capture / Store / Projections 结构、文件操作、模板、例子。</p>
+              <p>Capture / Workspace / Store / Projections 结构、schema、模板、例子。</p>
             </div>
 <div class="build-track">
               <h3>Phase 2</h3>

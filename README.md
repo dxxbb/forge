@@ -14,10 +14,15 @@
 基于官方文档、论文和社区实践，这个项目采用以下判断：
 
 - `knowledge base` 是当前最适合作为 Phase 1 的基础层
-- `Capture + Store + Projections` 是当前的核心架构
+- 当前核心结构是 `Capture + Workspace + Store + Projections`
+- 目录、schema、视图要明确分工：`Path` 只表达主归属，`Properties` 记录正交维度，`Views / Projections` 提供多入口
 - 不把 memory 等同于向量库；memory 至少应拆成 `working/profile/semantic/episodic/procedural`
-- memory 是一个持续循环：`capture -> consolidate -> project -> evolve`
+- memory 是一个持续循环：`capture -> workspace -> store -> project -> evolve`
 - knowledge base 更像一个带语义约束的文件系统：可以先以树形目录为骨架，再逐步长出链接网络
+- `Workspace` 必须存在，用来容纳 generated / candidate / review 中的内容
+- `Store` Phase 1 先只保留 `evidence / knowledge / state`
+- 普通文件自己就可以兼做索引页，不先把 `hub / MOC` 做成单独对象
+- Schema 要尽量扁平，方便 Obsidian Properties 和 Bases 直接工作
 - 写入分成 `hot path` 和 `background` 两条链路，不能所有记忆都阻塞主响应
 - 对个人场景，`profile` 必须结构化且可编辑，不能只靠 embedding 检索
 - `HOT/WARM/COLD` 是和 memory type 正交的第二层分类，用来决定哪些内容常驻、按需加载、归档
@@ -30,9 +35,14 @@
 - [docs/research/current-practices.md](docs/research/current-practices.md)
 - [docs/research/community-operating-patterns.md](docs/research/community-operating-patterns.md)
 - [docs/research/andrej-karpathy-llm-wiki.md](docs/research/andrej-karpathy-llm-wiki.md)
+- [docs/research/karpathy-thread-reactions.md](docs/research/karpathy-thread-reactions.md)
+- [docs/research/personal-ai-os-practitioners.md](docs/research/personal-ai-os-practitioners.md)
+- [docs/architecture/solution-design.md](docs/architecture/solution-design.md)
+- [docs/architecture/reframed-architecture.md](docs/architecture/reframed-architecture.md)
 - [docs/architecture/reference-architecture.md](docs/architecture/reference-architecture.md)
 - [docs/architecture/platform-landing-review.md](docs/architecture/platform-landing-review.md)
 - [docs/implementation/obsidian-kb-sop.md](docs/implementation/obsidian-kb-sop.md)
+- [docs/implementation/x-thread-ingest.md](docs/implementation/x-thread-ingest.md)
 - [docs/implementation/roadmap.md](docs/implementation/roadmap.md)
 
 ## 可视化方案页
@@ -132,10 +142,11 @@ python3 scripts/build_site.py
 
 ## 下一步
 
-- 先明确 `kb/` 目录结构、节点类型和 frontmatter
-- 明确 Obsidian-compatible vault schema 和使用 SOP
-- 从 KB 直接做 create / update / link / archive
-- 接入 inbox / daily / source reference
+- 先明确 `capture / workspace / store / projections` 目录结构
+- 明确公共 schema、family-specific 字段和 `Path / Properties / Views` 规则
+- 明确 Obsidian-compatible vault mapping、普通文件索引写法、Bases 视图和使用 SOP
+- 从这套主库直接做 create / update / link / archive
+- 接入 `capture/inbox / capture/daily / source reference / feedback`
 - 在 KB 之上做 organize / dream pipeline
 - 再增加 evolve pipeline，把重复 lesson 提炼成 skills / commands / agents
 - 最后再补 vector / graph / database enhancement 和评测

@@ -2,7 +2,7 @@
   "tracks": [
     {
       "title": "Phase 1",
-      "body": "Capture / Store / Projections 结构、文件操作、模板、例子。"
+      "body": "Capture / Workspace / Store / Projections 结构、schema、模板、例子。"
     },
     {
       "title": "Phase 2",

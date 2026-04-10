@@ -1,5 +1,16 @@
 # Implementation Roadmap
 
+补充说明：
+
+- 经过 `2026-04-09` 这轮 practitioner research 之后，架构已经不是单纯的 `KB-first`
+- 当前主方案已经升级成：`Capture / Workspace / Store / Projections`
+- 但重点不是层数，而是：`review gate + clean/generated separation + path/properties/views + research knowledge + operational state + platform entry`
+
+更完整的重设计说明见：
+
+- [solution-design.md](/Users/dxy-air/workspace/projects/memory_system/docs/architecture/solution-design.md)
+- [reframed-architecture.md](/Users/dxy-air/workspace/projects/memory_system/docs/architecture/reframed-architecture.md)
+
 ## Phase 0: Research and framing
 
 交付物：
@@ -18,17 +29,24 @@
 
 交付物：
 
-- `Capture / Store / Projections` 最小模型
-- `kb/` 目录结构约定
-- Obsidian-compatible vault schema
+- `Capture / Workspace / Store / Projections` 最小模型
+- `Store` node families：`evidence / knowledge / state`
+- `Workspace` model：`candidate / generated / ephemeral / review queue / promotion queue`
+- 目录结构约定：`capture / workspace / store / projections`
+- Obsidian-compatible vault mapping：`capture / workspace / store / _system`
+- 分类规则：`Path / Properties / Views`
 - 四个平台能力表：Claude Code / OpenClaw / Codex local / ChatGPT
 - platform landing spec: OpenClaw / Claude Code / Codex / ChatGPT
-- 节点类型定义：`profile/project/decision/topic/procedure/lesson`
+- 节点类型定义：`source/observation/topic/entity/profile/goal/project/decision/procedure/lesson/review/people/routine`
 - decision lifecycle：`proposed / active / superseded`
-- frontmatter schema
+- 状态轴：`confirmed / candidate / clean / generated / persistent / ephemeral / source-backed / synthesized`
+- 扁平 frontmatter schema
+- 公共字段：`id / family / kind / title / status / project_refs / domain_refs / source_refs / origin_* / confirmed_*`
 - stable id 规则
 - note templates
 - usage SOP / operating workflow
+- Bases / inline index note spec
+- review-gated promotion 规则
 - create / update / move / archive 操作接口
 - same-day correction 规则：支持平台、写入位置、过期规则
 - `Consolidate / Project` 规则
@@ -39,6 +57,11 @@
 
 - 可以把长期知识稳定保存成树优先、可链接的文件系统
 - 用户可以直接查看和编辑核心知识节点
+- `research knowledge` 和 `operational state` 已明确区分
+- `clean` 和 `generated` 已明确区分
+- `Path`、`properties`、`views` 的分工已经固定
+- 一份文件只有一个 canonical home，但可以同时出现在多个视图里
+- 关键文件可以兼做内容页和索引页
 - 用户可以在 Obsidian 中自然完成日常 capture / review / archive
 - 节点可重命名、移动、归档而不丢 identity
 - 已明确四个平台各自能做什么、做不到什么
@@ -46,16 +69,29 @@
 - ChatGPT 能消费导出摘要
 - 项目决策和主题知识不会混写
 
+## Phase 1.5: Graph & Temporal Enhancements (2026 Trend)
+
+交付物：
+
+- **Graph Explorer**: 基于 Markdown 链接的轻量级拓扑发现
+- **Temporal Anchor**: 在 frontmatter 中强制记录 `created_at` 和 `superseded_at`
+- **Identity Resolver**: 处理同名不同义或同义不同名的实体合并规则
+
+完成标准：
+
+- 能够识别知识库中的孤儿页面 (Orphan Pages)
+- 能够按时间线回溯知识的演进过程 (Timeline view)
+
 ## Phase 2: Capture and ingestion
 
 交付物：
 
-- `inbox/` 和 `daily/` 入口
+- `capture/inbox/` 和 `capture/daily/` 入口
 - raw observation schema
 - source reference 规范
 - chat / notes / files 的最小导入器
 - basic normalization pipeline
-- same-day correction inbox item
+- same-day correction feedback item
 - correction 过期和关闭机制
 
 完成标准：
@@ -83,6 +119,19 @@
 - knowledge base 可持续整理，而不是只追加
 - topic / entity 节点可以持续合并更新
 - 被证伪事实可失效
+
+## Phase 3.5: Auto-Compiler & Self-Healing (Karpathy's LLM Wiki)
+
+交付物：
+
+- **Knowledge Compiler Loop**: 自动将 `raw/` 增量编译进相关 `topic/` 页面
+- **Self-Healing Lint**: 自动检测陈旧说法、矛盾证据和断链
+- **Web Gap Filler**: 自动检索补齐 Wiki 中的信息空缺
+
+完成标准：
+
+- 摄入新原始资料后，系统能自动更新 5-10 个关联页面
+- 能够通过 Lint 脚本生成“知识库健康报告”
 
 ## Phase 4: Projections and platform sync
 
@@ -145,7 +194,8 @@
 
 交付物：
 
-- 评测数据集
+- 评测数据集 (针对个人场景)
+- **LOCOMO (Long-term Conversational Memory) Benchmark** 适配
 - 召回与污染率指标
 - latency / cost dashboard
 - 最小 Web UI
@@ -157,6 +207,7 @@
 - contradiction rate
 - context token cost
 - edit / delete success rate
+- **Fact-Superseding Accuracy** (时序正确率)
 
 ## 开源协作建议
 

@@ -5,10 +5,24 @@
       "head": "Step 1",
       "title": "Capture",
       "codes": [
-        "kb/inbox/2026-04-03-writing-style.md",
-        "kb/daily/2026-04-03.md"
+        "capture/feedback/2026-04-03-writing-style.md",
+        "capture/daily/2026-04-03.md"
       ],
-      "body": "先记 correction item，再在 daily 里留下候选决策。"
+      "body": "先记 feedback item，再在 daily 里留下当天记录。"
+    },
+    {
+      "kind": "bridge",
+      "label": "review"
+    },
+    {
+      "kind": "column",
+      "head": "Step 2",
+      "title": "Workspace",
+      "codes": [
+        "workspace/reviews/user-writing-preferences.md",
+        "workspace/promote/phase-1-kb-first.md"
+      ],
+      "body": "先生成候选整理稿，等人 review 后再 promote。"
     },
     {
       "kind": "bridge",
@@ -16,7 +30,7 @@
     },
     {
       "kind": "column",
-      "head": "Step 2",
+      "head": "Step 3",
       "title": "Projections",
       "codes": [
         "projections/claude/CLAUDE.memory.md",
@@ -32,14 +46,14 @@
     },
     {
       "kind": "column",
-      "head": "Step 3",
+      "head": "Step 4",
       "title": "Store",
       "codes": [
-        "kb/profile/user.md",
-        "kb/decisions/phase-1-kb-first.md",
-        "kb/projects/personal-memory-system.md"
+        "store/state/profile/user-writing-preferences.md",
+        "store/state/decisions/phase-1-kb-first.md",
+        "store/state/projects/personal-memory-system.md"
       ],
-      "body": "晚些时候再 Consolidate，把规则写进 Store，关闭 inbox item。"
+      "body": "晚些时候再 Consolidate，把规则写进主库，关闭 feedback item。"
     }
   ]
 }

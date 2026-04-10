@@ -254,7 +254,7 @@ def build_page() -> str:
     <title>Personal Memory System</title>
     <meta
       name="description"
-      content="Capture, Store, Projections. A visual architecture page for the Personal Memory System."
+      content="Capture, Workspace, Store, Projections. A visual architecture page for the Personal Memory System."
     />
     <link rel="icon" href="./favicon.svg" type="image/svg+xml" />
     <link rel="stylesheet" href="./styles.css" />
@@ -317,6 +317,23 @@ def build_page() -> str:
             </div>
 
             <div class="system-column">
+              <div class="diagram-box workspace-box">
+                <div class="diagram-title">
+                  <span class="diagram-index">{html.escape(system_map["workspace"]["index"])}</span>
+                  <h3>{html.escape(system_map["workspace"]["title"])}</h3>
+                </div>
+                <p class="diagram-copy">{html.escape(system_map["workspace"]["copy"])}</p>
+                <div class="chip-cloud">
+                  {render_chip_cloud(system_map["workspace"]["chips"])}
+                </div>
+              </div>
+            </div>
+
+            <div class="flow-bridge">
+              <span>{html.escape(system_map["bridges"][1])}</span>
+            </div>
+
+            <div class="system-column">
               <div class="diagram-box store-box">
                 <div class="diagram-title">
                   <span class="diagram-index">{html.escape(system_map["store"]["index"])}</span>
@@ -330,7 +347,7 @@ def build_page() -> str:
             </div>
 
             <div class="flow-bridge">
-              <span>{html.escape(system_map["bridges"][1])}</span>
+              <span>{html.escape(system_map["bridges"][2])}</span>
             </div>
 
             <div class="system-column">

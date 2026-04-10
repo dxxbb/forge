@@ -4,8 +4,10 @@ __pycache__/
 .mypy_cache/
 .ruff_cache/
 .venv/
+.obsidian/
+.claude/
 dist/
 build/
 *.egg-info/
 data/*.json
-
+data/x_threads/

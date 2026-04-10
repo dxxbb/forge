@@ -276,7 +276,7 @@ h1 {
 }
 
 .system-map {
-  grid-template-columns: minmax(0, 1fr) 132px minmax(0, 1fr) 132px minmax(0, 1.25fr);
+  grid-template-columns: minmax(0, 1fr) 96px minmax(0, 1fr) 96px minmax(0, 1fr) 96px minmax(0, 1.25fr);
   align-items: stretch;
 }
 
@@ -297,6 +297,10 @@ h1 {
 
 .capture-box {
   background: linear-gradient(180deg, rgba(198, 109, 47, 0.10), rgba(255, 255, 255, 0.46));
+}
+
+.workspace-box {
+  background: linear-gradient(180deg, rgba(84, 110, 186, 0.10), rgba(255, 255, 255, 0.46));
 }
 
 .store-box {

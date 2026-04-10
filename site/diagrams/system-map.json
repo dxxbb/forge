@@ -8,13 +8,23 @@
     },
     {
       "kind": "arrow",
-      "label": "Consolidate"
+      "label": "Prepare"
+    },
+    {
+      "kind": "node",
+      "class_name": "workspace",
+      "title": "Workspace",
+      "subtitle": "candidate / generated / review / promote"
+    },
+    {
+      "kind": "arrow",
+      "label": "Promote"
     },
     {
       "kind": "node",
       "class_name": "store",
       "title": "Store",
-      "subtitle": "profile / project / decision / topic / procedure / lesson"
+      "subtitle": "evidence / knowledge / state"
     },
     {
       "kind": "arrow",
@@ -31,15 +41,21 @@
     "index": "01",
     "title": "Capture",
     "copy": "先接住，先别假装它已经稳定。",
-    "chips": ["daily", "inbox", "raw notes", "same-day correction"]
+    "chips": ["daily", "inbox", "imports", "feedback"]
+  },
+  "workspace": {
+    "index": "02",
+    "title": "Workspace",
+    "copy": "generated / candidate / review 中的内容先待在这里。",
+    "chips": ["candidates", "reviews", "promote", "ephemeral"]
   },
   "store": {
-    "index": "02",
+    "index": "03",
     "title": "Store",
     "copy": "唯一真相源。稳定、当前有效、可持续维护。",
-    "chips": ["profile", "project", "decision", "topic", "procedure", "lesson"]
+    "chips": ["evidence", "knowledge", "state"]
   },
-  "bridges": ["Consolidate", "Project"],
+  "bridges": ["Prepare", "Promote", "Project"],
   "projections": [
     {
       "title": "Claude Code",
