@@ -8,8 +8,10 @@
 
 更完整的重设计说明见：
 
-- [solution-design.md](/Users/dxy-air/workspace/projects/memory_system/docs/architecture/solution-design.md)
-- [reframed-architecture.md](/Users/dxy-air/workspace/projects/memory_system/docs/architecture/reframed-architecture.md)
+- [personal-os-design.md](../architecture/personal-os-design.md) (`2026-04-13` 起的当前主方案)
+- [solution-design-v2.md](../architecture/solution-design-v2.md) (memory 子系统 Phase 1)
+- [reframed-architecture.md](../architecture/reframed-architecture.md) (架构推理过程)
+- [mvp-week1.md](mvp-week1.md) (Week 1 具体交付物)
 
 ## Phase 0: Research and framing
 

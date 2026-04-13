@@ -3,7 +3,8 @@
 补充说明：
 
 - 如果只看一篇当前主方案，请优先看：
-- [solution-design.md](/Users/dxy-air/workspace/projects/memory_system/docs/architecture/solution-design.md)
+- [personal-os-design.md](personal-os-design.md) (当前主方案)
+- [solution-design-v2.md](solution-design-v2.md) (memory 子系统 Phase 1)
 
 更新日期：`2026-04-09`
 

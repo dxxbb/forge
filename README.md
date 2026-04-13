@@ -11,39 +11,48 @@
 
 ## 当前结论
 
-基于官方文档、论文和社区实践，这个项目采用以下判断：
+`2026-04-13` 更新：项目范围从"memory 子系统"扩展到"personal OS"。当前主方案把整个个人 OS 设计成一个 **build system**：
 
-- `knowledge base` 是当前最适合作为 Phase 1 的基础层
-- 当前核心结构是 `Capture + Workspace + Store + Projections`
-- 目录、schema、视图要明确分工：`Path` 只表达主归属，`Properties` 记录正交维度，`Views / Projections` 提供多入口
-- 不把 memory 等同于向量库；memory 至少应拆成 `working/profile/semantic/episodic/procedural`
-- memory 是一个持续循环：`capture -> workspace -> store -> project -> evolve`
-- knowledge base 更像一个带语义约束的文件系统：可以先以树形目录为骨架，再逐步长出链接网络
-- `Workspace` 必须存在，用来容纳 generated / candidate / review 中的内容
-- `Store` Phase 1 先只保留 `evidence / knowledge / state`
-- 普通文件自己就可以兼做索引页，不先把 `hub / MOC` 做成单独对象
-- Schema 要尽量扁平，方便 Obsidian Properties 和 Bases 直接工作
-- 写入分成 `hot path` 和 `background` 两条链路，不能所有记忆都阻塞主响应
-- 对个人场景，`profile` 必须结构化且可编辑，不能只靠 embedding 检索
-- `HOT/WARM/COLD` 是和 memory type 正交的第二层分类，用来决定哪些内容常驻、按需加载、归档
-- 事件日志必须保留原始来源与时间语义，方便追溯、纠错和重建
-- vector、graph、database 更适合作为 derived indexes
-- 系统默认应是 `local-first`，用户可以查看、修改、删除自己的 memory
+- 所有变更都是 git diff，所有处理都走 PR，所有 view 都是预编译产物
+- 顶层按角色切分：`user/`(身份)、`workspace/`(活动)、`knowledge base/`(知识)、`assist/`(给 AI 用的投影)、`ingest src/` + `conversation memory/`(原材料)、`system/`(治理)
+- 外层管线(watcher / dispatcher / deps / approve)是确定性代码，内层判断由 agent + guideline 做
+- 依赖关系声明在每个 derived 文件的 frontmatter 里(`kind:` / `upstream:`)，`deps.py` 反向算传播
+- PR 支持三种出口：approve、reject、request-changes(带 comment 多轮往返)
+- watcher 只扫 main，用 commit trailer(`Approved-by:` / `Rebuilt-by:`)跳过系统自己产的 commit
 
-详细研究见：
+前几版(`knowledge base` 优先 + `Capture / Workspace / Store / Projections` 四层)的核心判断仍然有效，但作为 personal OS 里的一个子系统(memory 层)落在 `knowledge base/` + `user/` + `workspace/` 里。
+
+详细设计见：
+
+**当前主方案**
+
+- [docs/architecture/personal-os-design.md](docs/architecture/personal-os-design.md) —— `2026-04-13` 起的整体运转机制
+- [docs/implementation/mvp-week1.md](docs/implementation/mvp-week1.md) —— Week 1 具体交付物和验收闭环
+
+**前置设计(仍活跃)**
+
+- [docs/architecture/solution-design-v2.md](docs/architecture/solution-design-v2.md) —— memory 子系统 Phase 1
+- [docs/architecture/reframed-architecture.md](docs/architecture/reframed-architecture.md) —— 4 层语义切分的推理过程
+- [docs/architecture/platform-landing-review.md](docs/architecture/platform-landing-review.md) —— 各 AI 平台的 landing 能力对比
+
+**研究资料**
 
 - [docs/research/current-practices.md](docs/research/current-practices.md)
 - [docs/research/community-operating-patterns.md](docs/research/community-operating-patterns.md)
+- [docs/research/community-trends-2026.md](docs/research/community-trends-2026.md)
 - [docs/research/andrej-karpathy-llm-wiki.md](docs/research/andrej-karpathy-llm-wiki.md)
 - [docs/research/karpathy-thread-reactions.md](docs/research/karpathy-thread-reactions.md)
 - [docs/research/personal-ai-os-practitioners.md](docs/research/personal-ai-os-practitioners.md)
-- [docs/architecture/solution-design.md](docs/architecture/solution-design.md)
-- [docs/architecture/reframed-architecture.md](docs/architecture/reframed-architecture.md)
-- [docs/architecture/reference-architecture.md](docs/architecture/reference-architecture.md)
-- [docs/architecture/platform-landing-review.md](docs/architecture/platform-landing-review.md)
+
+**实施文档**
+
+- [docs/implementation/roadmap.md](docs/implementation/roadmap.md)
 - [docs/implementation/obsidian-kb-sop.md](docs/implementation/obsidian-kb-sop.md)
 - [docs/implementation/x-thread-ingest.md](docs/implementation/x-thread-ingest.md)
-- [docs/implementation/roadmap.md](docs/implementation/roadmap.md)
+
+**归档**(被取代但保留作历史参考)
+
+- [docs/architecture/_archive/](docs/architecture/_archive/)
 
 ## 可视化方案页
 
@@ -142,14 +151,25 @@ python3 scripts/build_site.py
 
 ## 下一步
 
-- 先明确 `capture / workspace / store / projections` 目录结构
-- 明确公共 schema、family-specific 字段和 `Path / Properties / Views` 规则
-- 明确 Obsidian-compatible vault mapping、普通文件索引写法、Bases 视图和使用 SOP
-- 从这套主库直接做 create / update / link / archive
-- 接入 `capture/inbox / capture/daily / source reference / feedback`
-- 在 KB 之上做 organize / dream pipeline
-- 再增加 evolve pipeline，把重复 lesson 提炼成 skills / commands / agents
-- 最后再补 vector / graph / database enhancement 和评测
+当前重点是跑通 personal OS 的 Week 1 MVP，详见 [docs/implementation/mvp-week1.md](docs/implementation/mvp-week1.md)。
+
+MVP 的最小闭环：
+
+1. 一段真实对话 → 手工保存 transcript 到 `conversation memory/YYYY-MM-DD/`，git commit
+2. `scripts/watch.py` 扫 git diff → inbox 产一条 TODO
+3. `scripts/dispatch.py` 启动 Claude Code → agent 按 `events/conversation.md` 评估对话 → 产一个 PR branch 改 `assist/sp/master.md`
+4. 人 `git diff main...pr/0001` review → `scripts/approve.py pr/0001`
+5. `approve.py` 跑 `deps.py` → rebuild `assist/view/claude-code/CLAUDE.md` → squash merge 进 main
+6. 新 Claude Code session 读到新版 `CLAUDE.md`
+
+跑通后的 Phase 2 优先级：
+
+- 加第二个 event 类型(`daily_memo` 或 `ingest`)
+- 加 `workspace/` 相关事件处理
+- 加自动化 watcher(launchd / cron)
+- 加组合式 SP(master + role overlay)
+- 加 preference 完整闭环
+- 加 fact staleness 机制
 
 ## 参考资料
 
