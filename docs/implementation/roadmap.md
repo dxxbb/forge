@@ -9,9 +9,11 @@
 更完整的重设计说明见：
 
 - [personal-os-design.md](../architecture/personal-os-design.md) (`2026-04-13` 起的当前主方案)
-- [solution-design-v2.md](../architecture/solution-design-v2.md) (memory 子系统 Phase 1)
-- [reframed-architecture.md](../architecture/reframed-architecture.md) (架构推理过程)
+- [_archive/solution-design-v2.md](../architecture/_archive/solution-design-v2.md) (memory 子系统 Phase 1，已归档)
+- [_archive/reframed-architecture.md](../architecture/_archive/reframed-architecture.md) (架构推理过程，已归档)
 - [mvp-week1.md](mvp-week1.md) (Week 1 具体交付物)
+
+> **说明**：下面的 Phase 0-7 是旧 KB-first 叙事的遗留，保留作为历史参考。当前主线已切换到 build-system 模型，最新交付节奏见 `mvp-week1.md` 和 `personal-os-design.md`。
 
 ## Phase 0: Research and framing
 

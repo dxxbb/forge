@@ -6,8 +6,8 @@
 
 它和前面几版文档的关系：
 
-- [reframed-architecture.md](reframed-architecture.md) 给出 4 层分类(Capture / Workspace / Store / Projections)的**语义切分**
-- [solution-design-v2.md](solution-design-v2.md) 给出 memory_system 子系统的 **Phase 1 目录与交付物**
+- [_archive/reframed-architecture.md](_archive/reframed-architecture.md) 给出 4 层分类(Capture / Workspace / Store / Projections)的**语义切分**
+- [_archive/solution-design-v2.md](_archive/solution-design-v2.md) 给出 memory_system 子系统的 **Phase 1 目录与交付物**
 - 这篇 personal-os-design 给出**整个 OS 的运转机制**：文件怎么流动、事件怎么触发、agent 怎么改动、人怎么 review
 
 这三层互不取代：reframed 是"怎么切分"，v2 是"memory 子系统落地什么"，personal-os 是"整个 OS 作为一个 build system 怎么跑起来"。
@@ -324,7 +324,7 @@ watcher 对不跳过的 commit，遍历 diff 里涉及的每个文件：
 
 7. 在 `system/monitor-inbox/` 写一个 TODO 文件
 
-MVP 阶段 guideline 只覆盖 `conversation` 和 `pr_revision` 两类，其他类别的 TODO 被 dispatcher 路由到 `unclassified` handler(规则是"记一条 log 然后 skip")。
+MVP 阶段 guideline 只覆盖 `conversation` 和 `pr_revision` 两类，其他类别的 TODO 由 agent 按 guideline 判定为 `unclassified`，直接记一条 log 然后 skip。
 
 这里的 `pr_revision` 不是 watcher 扫出来的，而是 `request-changes.py` 直接入队的。
 

@@ -351,7 +351,7 @@ MVP 里 rebuild 逻辑不追求完美，追求"能跑完一次 demo 即可"。Ph
 - [ ] 整条链路没有任何一步卡住
 - [ ] 没有任何一个文件需要手工编辑才能让流程继续(除了第一步的 transcript 保存)
 - [ ] 再跑一次 `watch.py` 不会把 approve 产生的 merge commit 当成新事件(trailer 机制生效)
-- [ ] 再跑一次 `dispatch.py` 不会有残留 `todo` 状态的 inbox 项
+- [ ] 再对 Claude Code 说 "monitor OS" 时，inbox 里没有残留 `todo` 状态的项
 
 ### 允许 MVP 失败但要记录的情况
 
