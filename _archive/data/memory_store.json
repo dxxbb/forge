@@ -1,0 +1,244 @@
+{
+  "memories": [
+    {
+      "content": "用户计划下周去东京出差，周三下午到达，想把酒店安排在地铁站附近。",
+      "created_at": "2026-04-03T06:27:58.064719+00:00",
+      "id": "e526fc8434a64081854f3c9116c924b7",
+      "importance": 0.85,
+      "invalid_at": null,
+      "kind": "episode",
+      "metadata": {},
+      "related_ids": [],
+      "source": "chat",
+      "source_ref": null,
+      "summary": "下周东京出差，酒店最好靠近地铁站。",
+      "supersedes": [],
+      "tags": [
+        "旅行",
+        "东京",
+        "出差"
+      ],
+      "tier": "episodic",
+      "updated_at": "2026-04-03T06:27:58.064720+00:00",
+      "user_id": "demo",
+      "valid_at": "2026-04-03T06:27:58.064717+00:00"
+    },
+    {
+      "content": "用户明确表示做个人 AI memory 时，不能只用向量库，必须保留结构化 profile。",
+      "created_at": "2026-04-03T06:27:58.064942+00:00",
+      "id": "b7f00d8742d74829a2d5be86c2a8922d",
+      "importance": 0.95,
+      "invalid_at": null,
+      "kind": "preference",
+      "metadata": {},
+      "related_ids": [],
+      "source": "manual",
+      "source_ref": null,
+      "summary": "个人 memory 方案必须包含结构化 profile，不接受 vector-only。",
+      "supersedes": [],
+      "tags": [
+        "memory",
+        "架构",
+        "profile"
+      ],
+      "tier": "semantic",
+      "updated_at": "2026-04-03T06:27:58.064943+00:00",
+      "user_id": "demo",
+      "valid_at": "2026-04-03T06:27:58.064940+00:00"
+    },
+    {
+      "content": "在整理个人知识时，优先把聊天、笔记、任务和日历统一成事件流，再生成长期记忆。",
+      "created_at": "2026-04-03T06:27:58.065060+00:00",
+      "id": "895f0ce009dc4b42927aa821696b99ad",
+      "importance": 0.88,
+      "invalid_at": null,
+      "kind": "procedure",
+      "metadata": {},
+      "related_ids": [],
+      "source": "note",
+      "source_ref": null,
+      "summary": "先统一事件流，再生成长期记忆。",
+      "supersedes": [],
+      "tags": [
+        "pipeline",
+        "etl",
+        "procedure"
+      ],
+      "tier": "procedural",
+      "updated_at": "2026-04-03T06:27:58.065060+00:00",
+      "user_id": "demo",
+      "valid_at": "2026-04-03T06:27:58.065059+00:00"
+    },
+    {
+      "content": "用户计划下周去东京出差，周三下午到达，想把酒店安排在地铁站附近。",
+      "created_at": "2026-04-03T07:00:59.559695+00:00",
+      "id": "84bc6b67309044f98e959ff94dc15630",
+      "importance": 0.85,
+      "invalid_at": null,
+      "kind": "episode",
+      "metadata": {},
+      "related_ids": [],
+      "source": "chat",
+      "source_ref": null,
+      "summary": "下周东京出差，酒店最好靠近地铁站。",
+      "supersedes": [],
+      "tags": [
+        "旅行",
+        "东京",
+        "出差"
+      ],
+      "temperature": "warm",
+      "tier": "episodic",
+      "updated_at": "2026-04-03T07:00:59.559695+00:00",
+      "user_id": "demo",
+      "valid_at": "2026-04-03T07:00:59.559692+00:00"
+    },
+    {
+      "content": "用户明确表示做个人 AI memory 时，不能只用向量库，必须保留结构化 profile。",
+      "created_at": "2026-04-03T07:00:59.559862+00:00",
+      "id": "6be203ea6a3246da9670554679df7aad",
+      "importance": 0.95,
+      "invalid_at": null,
+      "kind": "preference",
+      "metadata": {},
+      "related_ids": [],
+      "source": "manual",
+      "source_ref": null,
+      "summary": "个人 memory 方案必须包含结构化 profile，不接受 vector-only。",
+      "supersedes": [],
+      "tags": [
+        "memory",
+        "架构",
+        "profile"
+      ],
+      "temperature": "hot",
+      "tier": "semantic",
+      "updated_at": "2026-04-03T07:00:59.559862+00:00",
+      "user_id": "demo",
+      "valid_at": "2026-04-03T07:00:59.559860+00:00"
+    },
+    {
+      "content": "在整理个人知识时，优先把聊天、笔记、任务和日历统一成事件流，再生成长期记忆。",
+      "created_at": "2026-04-03T07:00:59.560019+00:00",
+      "id": "76c5754aa74c4bd0861ab4fc9c41da98",
+      "importance": 0.88,
+      "invalid_at": null,
+      "kind": "procedure",
+      "metadata": {},
+      "related_ids": [],
+      "source": "note",
+      "source_ref": null,
+      "summary": "先统一事件流，再生成长期记忆。",
+      "supersedes": [],
+      "tags": [
+        "pipeline",
+        "etl",
+        "procedure"
+      ],
+      "temperature": "hot",
+      "tier": "procedural",
+      "updated_at": "2026-04-03T07:00:59.560019+00:00",
+      "user_id": "demo",
+      "valid_at": "2026-04-03T07:00:59.560018+00:00"
+    },
+    {
+      "content": "用户计划下周去东京出差，周三下午到达，想把酒店安排在地铁站附近。",
+      "created_at": "2026-04-03T07:01:32.596524+00:00",
+      "id": "53c922cc3e1040678affc978cca35afb",
+      "importance": 0.85,
+      "invalid_at": null,
+      "kind": "episode",
+      "metadata": {},
+      "related_ids": [],
+      "source": "chat",
+      "source_ref": null,
+      "summary": "下周东京出差，酒店最好靠近地铁站。",
+      "supersedes": [],
+      "tags": [
+        "旅行",
+        "东京",
+        "出差"
+      ],
+      "temperature": "warm",
+      "tier": "episodic",
+      "updated_at": "2026-04-03T07:01:32.596524+00:00",
+      "user_id": "demo",
+      "valid_at": "2026-04-03T07:01:32.596520+00:00"
+    },
+    {
+      "content": "用户明确表示做个人 AI memory 时，不能只用向量库，必须保留结构化 profile。",
+      "created_at": "2026-04-03T07:01:32.596890+00:00",
+      "id": "e704a822350142babe0ccc209f9179d6",
+      "importance": 0.95,
+      "invalid_at": null,
+      "kind": "preference",
+      "metadata": {},
+      "related_ids": [],
+      "source": "manual",
+      "source_ref": null,
+      "summary": "个人 memory 方案必须包含结构化 profile，不接受 vector-only。",
+      "supersedes": [],
+      "tags": [
+        "memory",
+        "架构",
+        "profile"
+      ],
+      "temperature": "hot",
+      "tier": "semantic",
+      "updated_at": "2026-04-03T07:01:32.596891+00:00",
+      "user_id": "demo",
+      "valid_at": "2026-04-03T07:01:32.596889+00:00"
+    },
+    {
+      "content": "在整理个人知识时，优先把聊天、笔记、任务和日历统一成事件流，再生成长期记忆。",
+      "created_at": "2026-04-03T07:01:32.597226+00:00",
+      "id": "6e93f9e30031495db32cdc0a204d1748",
+      "importance": 0.88,
+      "invalid_at": null,
+      "kind": "procedure",
+      "metadata": {},
+      "related_ids": [],
+      "source": "note",
+      "source_ref": null,
+      "summary": "先统一事件流，再生成长期记忆。",
+      "supersedes": [],
+      "tags": [
+        "pipeline",
+        "etl",
+        "procedure"
+      ],
+      "temperature": "hot",
+      "tier": "procedural",
+      "updated_at": "2026-04-03T07:01:32.597226+00:00",
+      "user_id": "demo",
+      "valid_at": "2026-04-03T07:01:32.597224+00:00"
+    }
+  ],
+  "profiles": {
+    "demo": {
+      "constraints": [
+        "敏感信息默认不出本地",
+        "需要能人工编辑和删除记忆"
+      ],
+      "goals": [
+        "打造个人 memory 中枢",
+        "把零散笔记和聊天沉淀成可复用上下文"
+      ],
+      "people": {
+        "Alice": "合作者，擅长产品设计",
+        "Bob": "朋友，常一起安排行程"
+      },
+      "preferences": [
+        "偏好简洁直接的回答",
+        "优先本地优先和可审计系统",
+        "旅行时偏好靠窗座位"
+      ],
+      "routines": [
+        "每晚做 10 分钟日复盘",
+        "每周整理项目优先级"
+      ],
+      "updated_at": "2026-04-03T07:01:32.596004+00:00",
+      "user_id": "demo"
+    }
+  }
+}
