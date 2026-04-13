@@ -1,6 +1,8 @@
-# Personal OS
+# forge
 
-面向个人 AI assistant / agent 的 **personal operating system** 研究与落地项目。
+**forge** 是一个 Personal OS 的构建工具：把身份、偏好、知识这些原料在 `dxy_OS` 这样的个人 vault 里打造成预编译好的 system prompt 和 view。名字取自打铁的 forge —— 原料进、成品出，靠反复敲打收敛。
+
+本仓库存放 forge 的设计文档和脚本；vault 是独立的 git repo。
 
 ## 当前方案
 
@@ -65,7 +67,7 @@ python3 scripts/build_site.py        # 重新生成 site/index.html
 python3 -m http.server 8126 --bind 127.0.0.1 -d site   # 本地预览
 ```
 
-GitHub Pages: <https://dxxbb.github.io/personal_os/>
+GitHub Pages: <https://dxxbb.github.io/forge/>
 
 ## MVP 最小闭环
 
