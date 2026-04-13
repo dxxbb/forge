@@ -17,7 +17,7 @@
 
 ### 当前主方案
 
-- [onepage.md](docs/onepage.md) — **一页读懂整个项目**（推荐入口，可直接搬进 dxy_OS）
+- [onepage.md](docs/onepage.md) — **一页读懂整个项目**（推荐入口，可直接搬进 personal_OS vault）
 - [personal-os-design.md](docs/architecture/personal-os-design.md) — 整体运转机制（最详细）
 - [mvp-week1.md](docs/implementation/mvp-week1.md) — Week 1 交付物和验收闭环
 
