@@ -82,29 +82,8 @@ def update_inbox(root: Path, pr_id: str, branch: str, reason: str) -> Path | Non
     if not matches:
         return None
     target = matches[0]
-    text = target.read_text(encoding="utf-8")
-    if not text.startswith("---"):
-        return None
-    end = text.find("\n---", 3)
-    if end == -1:
-        return None
-    try:
-        fm = yaml.safe_load(text[3:end].strip()) or {}
-    except yaml.YAMLError:
-        return None
-    body = text[end + 4 :].lstrip("\n")
-
-    fm["status"] = "rejected"
-    fm["pr_branch"] = branch
-    fm["rejected_at"] = dt.datetime.now().replace(microsecond=0).isoformat()
-    fm["reject_reason"] = reason
-
-    new_fm = yaml.safe_dump(fm, allow_unicode=True, sort_keys=False).strip()
-    target.write_text(f"---\n{new_fm}\n---\n\n{body}", encoding="utf-8")
-    archived = inbox / "archive" / target.name
-    archived.parent.mkdir(parents=True, exist_ok=True)
-    target.rename(archived)
-    return archived
+    target.unlink()
+    return target
 
 
 def commit_system_files(root: Path, pr_id: str) -> None:

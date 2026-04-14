@@ -18,7 +18,7 @@
 - 1 个 view：`assist/view/claude-code/CLAUDE.md`
 - 1 份 SP：`assist/sp/master.md`
 - 1 份 section detail：`assist/section detail/me.md`
-- 6 个顶层目录：`user/`、`conversation memory/`、`assist/{section detail, sp, view}/`、`system/{monitor-inbox, change-request, change-log, operating-rule, pr-review}/`
+- 6 个顶层目录：`user/`、`conversation memory/`、`assist/{section detail, sp, view}/`、`system/{monitor-inbox, change-log, operating-rule, pr-review}/`
 
 **MVP 显式不做**：
 
@@ -51,10 +51,9 @@ vault/
 │       └── claude-code/
 │           └── CLAUDE.md                 # kind: derived, upstream: sp/master.md
 └── system/
-    ├── monitor-inbox/                    # agent 工作队列
-    ├── change-request/                   # PR 索引(MVP 阶段可空)
+    ├── monitor-inbox/                    # agent 工作队列（终态 TODO 立即删除，不保留）
     ├── change-log/                       # append-only 审计
-    ├── pr-review/                        # comment / response 文件
+    ├── pr-review/                        # comment / response 文件（review round-trip 载体）
     └── operating-rule/
         ├── global.md                     # 全局硬约束
         └── events/
