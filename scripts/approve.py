@@ -194,7 +194,10 @@ def update_inbox(root: Path, pr_id: str, branch: str) -> Path | None:
 
     new_fm = yaml.safe_dump(fm, allow_unicode=True, sort_keys=False).strip()
     target.write_text(f"---\n{new_fm}\n---\n\n{body}", encoding="utf-8")
-    return target
+    archived = inbox / "archive" / target.name
+    archived.parent.mkdir(parents=True, exist_ok=True)
+    target.rename(archived)
+    return archived
 
 
 def commit_system_files(root: Path, pr_id: str) -> None:
