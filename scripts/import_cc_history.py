@@ -4,7 +4,7 @@ import_cc_history.py - import Claude Code session transcripts into the vault.
 
 Scans ~/.claude/projects/<slug>/*.jsonl (top-level only, skipping subagent
 transcripts in subdirs) and renders each session as a single markdown file
-under <vault>/conversation memory/<YYYY-MM-DD>/cc-<slug>-<short-uuid>.md.
+under <vault>/conversation memory/daily/<YYYY-MM-DD>/cc-<slug>-<short-uuid>.md.
 
 Only user and assistant events are rendered. tool_use / tool_result blocks are
 compressed to one-line summaries. thinking blocks are skipped.
@@ -27,7 +27,7 @@ import re
 import sys
 from pathlib import Path
 
-CONV_DIR = "conversation memory"
+CONV_DIR = "conversation memory/daily"
 MAX_RESULT_CHARS = 200
 
 
