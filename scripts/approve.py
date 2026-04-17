@@ -51,8 +51,10 @@ def vault_root() -> Path:
 
 
 def git(root: Path, *args: str, check: bool = True) -> str:
+    # core.quotepath=false so non-ASCII filenames are returned verbatim (see
+    # watch.py for the full rationale).
     result = subprocess.run(
-        ["git", "-C", str(root), *args],
+        ["git", "-C", str(root), "-c", "core.quotepath=false", *args],
         text=True,
         capture_output=True,
     )

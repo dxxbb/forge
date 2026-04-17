@@ -43,8 +43,11 @@ def vault_root() -> Path:
 
 
 def git(root: Path, *args: str) -> str:
+    # core.quotepath=false: see watch.py rationale (non-ASCII filenames).
     result = subprocess.run(
-        ["git", "-C", str(root), *args], text=True, capture_output=True
+        ["git", "-C", str(root), "-c", "core.quotepath=false", *args],
+        text=True,
+        capture_output=True,
     )
     if result.returncode != 0:
         raise RuntimeError(f"git {' '.join(args)} failed:\n{result.stderr}")

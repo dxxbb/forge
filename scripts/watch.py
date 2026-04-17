@@ -43,8 +43,14 @@ def vault_root() -> Path:
 
 
 def git(root: Path, *args: str) -> str:
+    # core.quotepath=false so non-ASCII filenames (CJK / emoji / …) are
+    # returned verbatim instead of octal-escaped + double-quoted. Without this,
+    # `git show --name-status` emits e.g. `"ingest src/clipping/\345\276\256...md"`
+    # which breaks downstream .endswith(".md") checks.
     result = subprocess.run(
-        ["git", "-C", str(root), *args], text=True, capture_output=True
+        ["git", "-C", str(root), "-c", "core.quotepath=false", *args],
+        text=True,
+        capture_output=True,
     )
     if result.returncode != 0:
         raise subprocess.CalledProcessError(
