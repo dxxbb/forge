@@ -2,16 +2,18 @@
 """
 bench.py — evaluate dxy's personal OS context delivery.
 
-Runs the question bank against a specified system prompt (typically the
-CLAUDE.md view file), asks a judge model to rate each answer, writes a
-markdown report, and exits non-zero if pass thresholds aren't met.
+Spawns `claude -p` sessions against the vault to answer each question
+(using CLAUDE.md auto-discovery as SP), asks a judge `claude -p` session
+to rate each answer, writes a markdown report, exits non-zero if pass
+thresholds aren't met.
 
 Usage:
   bench.py --label <change-label>
-  bench.py --label <label> --sp 'assist/view/claude code/CLAUDE.md'
-  bench.py --label <label> --dry-run   # no API calls; validates parsing
+  bench.py --label <label> --dry-run   # no CLI calls; validates parsing
+  bench.py --label <label> --tier identity
 
-Requires ANTHROPIC_API_KEY env var.
+Uses the `claude` CLI so no separate API key is needed (CC's existing auth
+is reused). Tools are disabled (`--tools ""`) for Phase 1 pure-recall test.
 Vault path defaults to $PERSONAL_OS_VAULT or ~/dxy_OS.
 """
 
@@ -22,22 +24,15 @@ import datetime as dt
 import json
 import os
 import re
+import subprocess
 import sys
 from dataclasses import dataclass, field
 from pathlib import Path
 
-try:
-    from anthropic import Anthropic
-    _HAS_ANTHROPIC = True
-except ImportError:
-    Anthropic = None  # type: ignore[assignment,misc]
-    _HAS_ANTHROPIC = False
 
-
-AGENT_MODEL = "claude-sonnet-4-6"
-JUDGE_MODEL = "claude-opus-4-7"
-MAX_TOKENS_AGENT = 1024
-MAX_TOKENS_JUDGE = 512
+AGENT_MODEL = "sonnet"   # CLI alias → latest sonnet
+JUDGE_MODEL = "opus"     # CLI alias → latest opus
+CLI_TIMEOUT_SEC = 180
 
 
 # --- ANSI colors -----------------------------------------------------------
@@ -151,22 +146,55 @@ def parse_questions(path: Path) -> list[Question]:
     return questions
 
 
-# --- API calls -------------------------------------------------------------
+# --- CLI calls (claude -p) -------------------------------------------------
 
 
-def run_agent(client: Anthropic, sp: str, question: str) -> str:
-    resp = client.messages.create(
-        model=AGENT_MODEL,
-        max_tokens=MAX_TOKENS_AGENT,
-        system=sp,
-        messages=[{"role": "user", "content": question}],
+def _run_claude(
+    prompt: str,
+    *,
+    cwd: Path,
+    model: str,
+    system_prompt: str | None = None,
+) -> str:
+    """Invoke `claude -p` and return the assistant's text reply."""
+    cmd = [
+        "claude", "-p", prompt,
+        "--model", model,
+        "--tools", "",
+        "--output-format", "json",
+        "--no-session-persistence",
+        "--permission-mode", "default",
+    ]
+    if system_prompt is not None:
+        cmd.extend(["--system-prompt", system_prompt])
+    proc = subprocess.run(
+        cmd,
+        cwd=str(cwd),
+        capture_output=True,
+        text=True,
+        timeout=CLI_TIMEOUT_SEC,
     )
-    parts = [b.text for b in resp.content if getattr(b, "type", "") == "text"]
-    return "\n".join(parts).strip()
+    if proc.returncode != 0:
+        raise RuntimeError(
+            f"claude -p failed (rc={proc.returncode}): {proc.stderr.strip()[:400]}"
+        )
+    try:
+        obj = json.loads(proc.stdout)
+    except json.JSONDecodeError as e:
+        raise RuntimeError(f"claude -p output not JSON: {e}; stdout={proc.stdout[:400]}")
+    result = obj.get("result")
+    if not isinstance(result, str):
+        raise RuntimeError(f"claude -p output missing 'result' field: {obj}")
+    return result.strip()
+
+
+def run_agent(vault: Path, question: str) -> str:
+    # Agent: run from vault cwd so CLAUDE.md auto-discovery loads the real SP.
+    return _run_claude(question, cwd=vault, model=AGENT_MODEL)
 
 
 def run_judge(
-    client: Anthropic,
+    vault: Path,
     judge_prompt: str,
     q: Question,
     actual: str,
@@ -178,15 +206,14 @@ def run_judge(
         f"Tier: {q.tier}\n\n"
         f"Actual answer from agent:\n{actual}\n"
     )
-    resp = client.messages.create(
+    # Judge: explicit --system-prompt overrides CLAUDE.md auto-discovery so
+    # the rubric isn't contaminated by project context.
+    text = _run_claude(
+        user,
+        cwd=vault,
         model=JUDGE_MODEL,
-        max_tokens=MAX_TOKENS_JUDGE,
-        system=judge_prompt,
-        messages=[{"role": "user", "content": user}],
+        system_prompt=judge_prompt,
     )
-    text = "\n".join(
-        b.text for b in resp.content if getattr(b, "type", "") == "text"
-    ).strip()
     m = re.search(r"\{.*\}", text, re.DOTALL)
     if not m:
         return "FAIL-WRONG", f"judge output not JSON: {text[:200]}"
@@ -353,7 +380,7 @@ def main() -> int:
     questions_path = vault / args.questions
     judge_prompt_path = vault / args.judge_prompt
 
-    sp_text = sp_path.read_text(encoding="utf-8")
+    sp_size = sp_path.stat().st_size
     judge_prompt_text = judge_prompt_path.read_text(encoding="utf-8")
     questions = parse_questions(questions_path)
     if args.tier:
@@ -363,7 +390,7 @@ def main() -> int:
         return 2
 
     print(f"{BOLD}Bench run: {args.label}{RESET}")
-    print(f"  SP: {args.sp} ({len(sp_text)} chars)")
+    print(f"  SP (via CLAUDE.md auto-discovery from vault): {args.sp} ({sp_size} bytes)")
     print(f"  Questions: {len(questions)}")
     print()
 
@@ -372,25 +399,16 @@ def main() -> int:
             print(f"  [{q.tier}] {q.id}: {q.text[:80]}")
         return 0
 
-    if not _HAS_ANTHROPIC:
-        sys.stderr.write("bench.py needs anthropic: pip install anthropic\n")
-        return 2
-    if not os.environ.get("ANTHROPIC_API_KEY"):
-        sys.stderr.write("ANTHROPIC_API_KEY not set\n")
-        return 2
-
-    client = Anthropic()
-
     results: list[Result] = []
     for q in questions:
         print(f"  [{q.tier}] {q.id}: {q.text[:70]}")
         try:
-            actual = run_agent(client, sp_text, q.text)
-            rating, reason = run_judge(client, judge_prompt_text, q, actual)
+            actual = run_agent(vault, q.text)
+            rating, reason = run_judge(vault, judge_prompt_text, q, actual)
         except Exception as e:  # noqa: BLE001
             actual = ""
             rating = "FAIL-WRONG"
-            reason = f"api error: {e}"
+            reason = f"cli error: {e}"
         results.append(Result(question=q, actual=actual, rating=rating, reason=reason))
         c = color_for(rating)
         print(f"    {c}{rating:<14}{RESET} {reason}")
