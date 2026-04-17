@@ -24,6 +24,7 @@
 | `mvp-week1.md` | `docs/implementation/mvp-week1.md` | `2026-04-17` | `docs/design.md` §14（内容合并） |
 | `roadmap.md` | `docs/implementation/roadmap.md` | `2026-04-17` | 自述"Phase 0-7 是旧 KB-first 叙事的遗留"，整份归档 |
 | `obsidian-kb-sop.md` | `docs/implementation/obsidian-kb-sop.md` | `2026-04-17` | 04-03 前的 `capture / workspace / store / _system` 四层方案，已被 build-system 模型 + 极简 frontmatter 取代；当前 Obsidian 约定见 `docs/design.md` §13 |
+| `design-kb-sp-bench.md` | `notes/design-kb-sp-bench.md` | `2026-04-17` | KB → SP 接入 + Bench 系统的 proposed 设计稿；方案已在 pr/0003-kb-topic-model（vault）与 `scripts/bench.py` 落地 |
 
 ## 当前主文档
 
