@@ -24,14 +24,13 @@
 
 ### 研究资料
 
-- [current-practices.md](docs/research/current-practices.md)
-- [community-operating-patterns.md](docs/research/community-operating-patterns.md)
-- [community-trends-2026.md](docs/research/community-trends-2026.md)
-- [andrej-karpathy-llm-wiki.md](docs/research/andrej-karpathy-llm-wiki.md)
-- [karpathy-thread-reactions.md](docs/research/karpathy-thread-reactions.md)
-- [personal-ai-os-practitioners.md](docs/research/personal-ai-os-practitioners.md)
+研究资料已整体迁至 vault `knowledge base/`（PR 0005，2026-04-17），当前分布：
 
-> 研究资料后续将整体迁往 vault 的 `knowledge base/`（待另一 PR 执行）。
+- `knowledge base/tech/ai/personal-os/karpathy-wiki.md` — Karpathy LLM Wiki 方案 + X thread 社区反应
+- `knowledge base/tech/ai/personal-os/practitioners.md` — 非 Karpathy 实践者（Nick Milo / Eugene / Cole / Huy / Sean / Akshay）+ Nous Hermes agent
+- `knowledge base/tech/ai/memory/memory-patterns.md` — long memory 学术模型 + 社区操作模式 + 2026 产品进展
+- `knowledge base/tech/ai/claude-code/claude-code.md` — Claude Code 能力边界、prompt 最佳实践
+- `knowledge base/tech/ai/policy/ai-policy.md` — AI 产业地缘政治与监管
 
 ### 归档（被取代但保留作历史参考）
 
@@ -44,7 +43,6 @@
 ```text
 docs/
   design.md           单一设计文档（当前主方案）
-  research/           调研文档（6 篇，待迁往 vault knowledge base/）
   architecture/_archive/   历史设计与实施文档归档
 scripts/              工具脚本（站点生成；MVP 脚本待写）
 site/                 可视化方案页

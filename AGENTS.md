@@ -42,8 +42,8 @@ python3 -m http.server 8126 --bind 127.0.0.1 -d site
 
 **Docs structure:**
 - `docs/design.md` — single design document
-- `docs/research/` — survey of current memory approaches and practitioner patterns (pending migration to vault knowledge base/)
 - `docs/architecture/_archive/` — superseded design and implementation docs
+- Research material lives in vault `knowledge base/` (migrated 2026-04-17, PR 0005)
 
 **Archived (old prototype, not current):**
 - `_archive/src/memory_system/` — Phase 0 JSON memory engine (deprecated)
