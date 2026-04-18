@@ -3,7 +3,7 @@
 approve.py - approve a PR branch and squash-merge it into main.
 
 Under the current model, the agent has already performed the full downstream
-rebuild inside the pr/* branch (see system/operating-rule/*-rebuild.md). This
+rebuild inside the pr/* branch (see system/operating rule/*-rebuild.md). This
 script does NOT run rebuild. It only:
 
   1. assert main is clean
@@ -11,7 +11,7 @@ script does NOT run rebuild. It only:
   3. read the original PR commit message (first commit on the branch)
   4. squash-merge into main with an Approved-by: trailer
   5. delete the branch
-  6. prepend a line to system/change-log/<YYYY-MM>.md
+  6. prepend a line to system/change log/<YYYY-MM>.md
   7. mark the corresponding inbox TODO as done (if present)
 
 Usage:
@@ -38,8 +38,8 @@ except ImportError:
     sys.stderr.write("approve.py needs PyYAML: pip install pyyaml\n")
     sys.exit(1)
 
-CHANGE_LOG_DIR = "system/change-log"
-INBOX_DIR = "system/monitor-inbox"
+CHANGE_LOG_DIR = "system/change log"
+INBOX_DIR = "system/monitor inbox"
 PR_ID_RE = re.compile(r"^pr/(\d+)(?:-.*)?$")
 
 

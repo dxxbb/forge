@@ -31,7 +31,7 @@ except ImportError:
 
 SKIP_TRAILERS = ("Approved-by:", "Rebuilt-by:", "System-owned-by:")
 STATE_FILE = "system/.watcher-state.json"
-INBOX_DIR = "system/monitor-inbox"
+INBOX_DIR = "system/monitor inbox"
 FALLBACK_WINDOW = 50  # commits to look back when state is missing
 
 

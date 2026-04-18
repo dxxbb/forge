@@ -3,7 +3,7 @@
 request-changes.py - request changes on a PR branch.
 
 Opens $EDITOR for the reviewer to write a comment, saves it as
-system/pr-review/pr-<id>-comments-round<N>.md, commits it to the PR branch,
+system/PR review/pr-<id>-comments-round<N>.md, commits it to the PR branch,
 returns to main, and enqueues a pr_revision inbox TODO so the agent will pick
 it up on the next monitor.
 
@@ -30,8 +30,8 @@ except ImportError:
     sys.stderr.write("request-changes.py needs PyYAML: pip install pyyaml\n")
     sys.exit(1)
 
-PR_REVIEW_DIR = "system/pr-review"
-INBOX_DIR = "system/monitor-inbox"
+PR_REVIEW_DIR = "system/PR review"
+INBOX_DIR = "system/monitor inbox"
 PR_ID_RE = re.compile(r"^pr/(\d+)(?:-.*)?$")
 
 
