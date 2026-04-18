@@ -103,8 +103,8 @@ kind: source
 ---
 kind: derived
 upstream:
-  - user/about me/me.md
-  - user/about me/philosophy.md
+  - user/me/me.md
+  - user/me/philosophy.md
 generated_by: pr-0042
 last_rebuild_at: 2026-04-13T10:23:00
 ---
@@ -549,7 +549,7 @@ vault/
 │       └── .gitkeep                      # 空目录占位
 ├── assist/
 │   ├── sp/section/
-│   │   └── me.md                         # kind: derived, upstream: user/about me/me.md
+│   │   └── me.md                         # kind: derived, upstream: user/me/me.md
 │   ├── sp/
 │   │   └── master.md                     # kind: derived, upstream: sp/section/about user/identity.md
 │   └── view/
