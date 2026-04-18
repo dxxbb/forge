@@ -174,7 +174,7 @@ watcher 每次把无 frontmatter 的文件视为 source 时，要在 log 里记 
 
 - `user/` —— 身份真相源，agent 不能改
 - `knowledge base/` —— 长期知识
-- `assist/SP/section/`、`assist/SP/`、`assist/view/` —— 依赖传播链的中转和终点
+- `assist/SP/section/`、`assist/SP/`、`assist/SP/output/` —— 依赖传播链的中转和终点
 - `assist/preference/current/` —— 生效中的偏好(`learning inbox` 是 agent 可写的，`current` 不可)
 - `workspace/` —— 灰色地带但取严格态度：**workspace 也要 review**
 - `system/operating rule/` —— agent 不能自己改游戏规则
@@ -520,7 +520,7 @@ vault（`dxy_OS/`）是一个独立 git repo，日常由 **Obsidian 作为人机
 **MVP 只覆盖**：
 
 - 1 个事件类型：`conversation`
-- 1 个 view：`assist/view/claude-code/CLAUDE.md`
+- 1 个 view：`assist/SP/output/claude-code/CLAUDE.md`
 - 1 份 SP：`assist/SP/config/master.md`
 - 1 份 sp/section：`assist/SP/section/me.md`
 - 6 个顶层目录：`user/`、`assist/memory collection/`、`assist/{sp/section, sp, view}/`、`system/{monitor inbox, change log, operating rule, PR review}/`

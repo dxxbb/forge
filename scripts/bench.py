@@ -358,7 +358,7 @@ def main() -> int:
     ap = argparse.ArgumentParser()
     ap.add_argument("--vault", help="vault root (default $PERSONAL_OS_VAULT or ~/dxy_OS)")
     ap.add_argument("--label", required=True, help="change label (e.g. kb-sp-integration)")
-    ap.add_argument("--sp", default="assist/view/claude code/CLAUDE.md",
+    ap.add_argument("--sp", default="assist/SP/output/claude code/CLAUDE.md",
                     help="path (relative to vault) to the SP file to test against")
     ap.add_argument("--questions", default="system/bench/questions.md")
     ap.add_argument("--judge-prompt", default="system/bench/judge-prompt.md")
