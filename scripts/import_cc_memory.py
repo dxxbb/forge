@@ -28,9 +28,11 @@ from __future__ import annotations
 import argparse
 import os
 import sys
+import time
 from pathlib import Path
 
 CC_SUBDIR = "01 assist/memory collection/agents memory"
+DEFAULT_STALE_DAYS = 14
 
 
 def vault_root(arg: str | None) -> Path:
@@ -65,6 +67,9 @@ def main() -> int:
     ap.add_argument("--vault", help="vault root (default: $PERSONAL_OS_VAULT or ~/dxy_OS)")
     ap.add_argument("--source", help="claude projects dir (default: ~/.claude/projects)")
     ap.add_argument("--dry-run", action="store_true")
+    ap.add_argument("--stale-days", type=int, default=DEFAULT_STALE_DAYS,
+                    help=f"skip projects whose newest *.jsonl session is older than N days "
+                         f"(default {DEFAULT_STALE_DAYS}; 0 to disable)")
     args = ap.parse_args()
 
     vault = vault_root(args.vault)
@@ -77,8 +82,11 @@ def main() -> int:
         sys.stderr.write(f"source not found: {source}\n")
         return 2
 
+    stale_cutoff = (time.time() - args.stale_days * 86400) if args.stale_days > 0 else None
+
     total = 0
     touched = 0
+    skipped_stale = 0
     for pdir in sorted(source.iterdir()):
         mem = pdir / "memory"
         if not mem.is_dir():
@@ -87,6 +95,15 @@ def main() -> int:
         if not mds:
             continue
         slug = slug_from_dir(pdir.name)
+        if stale_cutoff is not None:
+            sessions = list(pdir.glob("*.jsonl"))
+            newest = max((s.stat().st_mtime for s in sessions), default=0)
+            if newest < stale_cutoff:
+                age_days = (time.time() - newest) / 86400 if newest else float("inf")
+                age_str = f"{age_days:.0f}d" if newest else "no sessions"
+                print(f"[{slug}] skip (stale: newest session {age_str} > {args.stale_days}d)")
+                skipped_stale += 1
+                continue
         out_dir = vault / CC_SUBDIR / slug
         print(f"[{slug}] {len(mds)} memory files")
         for src in mds:
@@ -96,7 +113,7 @@ def main() -> int:
             total += 1
             if status not in ("unchanged",):
                 touched += 1
-    print(f"processed {total} files ({touched} new/changed)")
+    print(f"processed {total} files ({touched} new/changed, {skipped_stale} stale projects skipped)")
     return 0
 
 

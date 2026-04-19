@@ -25,10 +25,12 @@ import json
 import os
 import re
 import sys
+import time
 from pathlib import Path
 
 CONV_DIR = "01 assist/memory collection/history"
 MAX_RESULT_CHARS = 200
+DEFAULT_STALE_DAYS = 14
 
 
 def vault_root(arg: str | None) -> Path:
@@ -196,6 +198,9 @@ def main() -> int:
     ap.add_argument("--project", help="only import this project dir (basename)")
     ap.add_argument("--dry-run", action="store_true")
     ap.add_argument("--force", action="store_true", help="overwrite existing output")
+    ap.add_argument("--stale-days", type=int, default=DEFAULT_STALE_DAYS,
+                    help=f"skip projects whose newest *.jsonl session is older than N days "
+                         f"(default {DEFAULT_STALE_DAYS}; 0 to disable)")
     args = ap.parse_args()
 
     vault = vault_root(args.vault)
@@ -215,11 +220,23 @@ def main() -> int:
             sys.stderr.write(f"project not found: {args.project}\n")
             return 1
 
+    stale_cutoff = (time.time() - args.stale_days * 86400) if args.stale_days > 0 else None
+
     total = 0
+    skipped_stale = 0
     for pdir in project_dirs:
         jsonls = sorted(pdir.glob("*.jsonl"))
         if not jsonls:
             continue
+        slug = slug_from_dir(pdir.name)
+        if stale_cutoff is not None:
+            newest = max((j.stat().st_mtime for j in jsonls), default=0)
+            if newest < stale_cutoff:
+                age_days = (time.time() - newest) / 86400 if newest else float("inf")
+                age_str = f"{age_days:.0f}d" if newest else "no sessions"
+                print(f"[{slug}] skip (stale: newest session {age_str} > {args.stale_days}d)")
+                skipped_stale += 1
+                continue
         print(f"[{pdir.name}] {len(jsonls)} sessions")
         for j in jsonls:
             try:
@@ -228,7 +245,7 @@ def main() -> int:
                 status = f"ERROR: {e}"
             print(f"  {j.name}: {status}")
             total += 1
-    print(f"processed {total} sessions")
+    print(f"processed {total} sessions ({skipped_stale} stale projects skipped)")
     return 0
 
 
