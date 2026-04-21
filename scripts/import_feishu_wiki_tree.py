@@ -76,6 +76,14 @@ def normalize(title: str, md: str) -> str:
     return md.rstrip() + "\n"
 
 
+def is_empty_shell(title: str, md: str) -> bool:
+    """True when doc has no content beyond title + directory-placeholder tags."""
+    stripped = md
+    stripped = re.sub(r"^\s*#\s+.+$", "", stripped, count=1, flags=re.MULTILINE)
+    stripped = re.sub(r'<sub-page-list[^>]*/>', "", stripped)
+    return stripped.strip() == ""
+
+
 def slugify(title: str) -> str:
     s = title.strip()
     trans = str.maketrans({
@@ -106,12 +114,15 @@ def walk(node_token: str, out_dir: pathlib.Path, seen: set[str]) -> None:
 
     slug = slugify(title)
     t, md = fetch_docx(obj_token)
-    body = normalize(t or title, md)
 
-    out_dir.mkdir(parents=True, exist_ok=True)
-    target = out_dir / f"{slug}.md"
-    target.write_text(body, encoding="utf-8")
-    print(f"  wrote {target} ({len(body.splitlines())} lines)", file=sys.stderr)
+    if is_empty_shell(t or title, md):
+        print(f"  [skip empty shell] {title}", file=sys.stderr)
+    else:
+        body = normalize(t or title, md)
+        out_dir.mkdir(parents=True, exist_ok=True)
+        target = out_dir / f"{slug}.md"
+        target.write_text(body, encoding="utf-8")
+        print(f"  wrote {target} ({len(body.splitlines())} lines)", file=sys.stderr)
 
     if has_child:
         children = list_children(space_id, node_token)
