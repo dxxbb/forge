@@ -98,7 +98,7 @@ agent 提议 diff (不直接 commit) ──▶ 主人 apply / 拒绝
 
 1. 人或 agent 写一个 `kind: source` 文件并 commit 到 main (`02 user/` 例外, 见上方平行通路)
 2. Agent 起手时运行 `watch.py` 扫 `git log main`, 按 frontmatter 给每个 diff 分类, 在 `06 system/monitor inbox/` 产 TODO
-3. Agent 读 inbox 最早的 `status: todo` 项, 加载 `global.md + events/<event_type>.md` 作为处理规则
+3. Agent 读 inbox 最早的 `status: todo` 项, 加载 `os-operator` skill + `references/events/<event_type>.md` 作为处理规则 (invariants 常载, skill trigger-loaded; 详见 §9)
 4. Agent 按 guideline 处理: 在 `pr/<id>-...` branch 上按 SP MVC 依次 rebuild section → config → output, commit 跨三层完整改动
 5. Agent 更新 inbox 状态 (done / skipped / unsure / waiting_rereview), 在 change log 写一行
 6. 人看 inbox 里 "ready for review", `git diff main...pr/<id>` (一个 diff 看到 source → section → config → output 的完整影响)
@@ -253,10 +253,20 @@ forge 对 `02 user/` 的硬约束只有两条:
 └── api key/
 
 06 system/
-├── operating rule/                  # global.md + events/*.md
+├── operating rule/                  # 规则三层: invariants 常载 + references (见 §9)
+│   ├── invariants.md                # 常载硬约束 (写权 / 身份 / ground)
+│   └── references/                  # trigger/on-demand 加载
+│       ├── events/*.md              # 事件分派规则 (conversation / cc_memory / ingest / pr_revision)
+│       ├── visibility-triage.md     # decision rule
+│       ├── section-rebuild.md       # procedure
+│       ├── sp-rebuild.md            # procedure
+│       └── view-rebuild.md          # procedure
 ├── monitor inbox/                   # watcher 产出的 TODO 队列
 ├── PR review/                       # comment / response 文件 (PR round-trip 载体)
 └── change log/                      # append-only 审计
+
+# OS operator procedure 本身以 skill 形式存放, 不在 06 system/ 下:
+#   01 assist/learn and improve/skill/os-operator.md
 ```
 
 ### 3.8 规划但尚未建立的目录 (forge 框架层)
@@ -553,53 +563,109 @@ PR 本身就是 git branch，不需要单独的元数据目录。`06 system/PR r
 
 ## 9. Guideline 的结构
 
-### 9.1 目录布局
+### 9.1 三层模型
+
+一条 rule 进入 agent 注意力的时机不同，需要不同形式。一刀切会两头受伤——总是载入就浪费 token 且稀释信号，按需载入就漏守底线。三类 rule：
+
+| 类型 | 例子 | 形式 | 何时进入 context |
+|---|---|---|---|
+| **Invariant** | 写权边界、frontmatter kind 约定、外部事实 ground 要求 | 短密常载文件 (~50 行内) | 每次 agent session 启动 |
+| **Procedure** | Monitor 流程、PR 硬约束与 review、依赖传播、inbox 状态机、advisory PR | skill 文件, frontmatter 带 `triggers:` | agent 识别到 trigger 或隐式触发时 |
+| **Decision rule / per-event procedure** | visibility-triage、section/sp/view rebuild、events/\*.md 事件分派 | reference 文件, 被 skill 显式调用 | 走到那个决策节点 / event_type 分派时 |
+
+一条 rule 放错层就不对：invariant 如果 skill 化 → 普通协作时可能踩红线；procedure 如果常载 → 做非 OS 任务也背完整 PR 工作流；decision rule 如果 invariant 化 → 没触发也在脑子里转。
+
+### 9.2 目录布局
 
 ```
 06 system/operating rule/
-├── global.md                    # 跨事件的硬约束 + agent 身份
-└── events/
-    ├── conversation.md          # MVP 唯一的事件处理规则
-    ├── pr_revision.md           # (MVP 第二份，处理 comment 回合)
-    ├── daily_memo.md            # Phase 2
-    ├── identity_change.md       # Phase 2
-    ├── project_update.md        # Phase 2
-    └── ...
+├── invariants.md                    # 常载硬约束 (~50 行)
+└── references/
+    ├── events/
+    │   ├── conversation.md
+    │   ├── cc_memory.md
+    │   ├── ingest.md
+    │   └── pr_revision.md
+    ├── visibility-triage.md         # decision rule
+    ├── section-rebuild.md           # procedure
+    ├── sp-rebuild.md                # procedure
+    └── view-rebuild.md              # procedure
+
+01 assist/learn and improve/skill/
+├── os-operator.md                   # OS operator procedure (trigger-loaded)
+└── doc-management.md                # 通用 doc craft
 ```
 
-### 9.2 agent 的 guideline 载入
+OS operator procedure 以 skill 形式存放, 不在 `06 system/` 下: skill 是 vault 层的**可复用 craft 集合** (doc-management、os-operator 等), 按触发词载入, 语义上和 "系统 control plane" (`06 system/**`) 不同——control plane 是 OS 运转数据 (inbox / change log / review 载体), skill 是 agent 的操作手册。
+
+### 9.3 agent 的 guideline 载入
 
 ```python
-def load_guideline(event_type: str) -> str:
-    return read("global.md") + "\n\n" + read(f"events/{event_type}.md")
+# 启动时常载
+invariants = read("06 system/operating rule/invariants.md")
+
+# trigger 触发或隐式触发时
+if user_says_any(["monitor", "扫 inbox", "处理 TODO", ...]) or task_modifies_source():
+    skill = read("01 assist/learn and improve/skill/os-operator.md")
+
+# Monitor 流程 step 5 按 event_type 分派
+event_rule = read(f"06 system/operating rule/references/events/{event_type}.md")
+
+# procedure / decision rule 在 skill 里被显式调用时
+triage = read("06 system/operating rule/references/visibility-triage.md")
+rebuild = read("06 system/operating rule/references/sp-rebuild.md")
 ```
 
-Agent 在处理每个 inbox 项时，直接读取 `global.md + events/<event_type>.md` 作为处理规则，加上 inbox TODO 的内容作为当前任务。载入过程发生在 agent session 内部，不需要外部脚本拼接。
+invariants 常载, skill trigger-loaded, references 被 skill 按需调用。载入过程发生在 agent session 内部, 不需要外部脚本拼接。
 
-### 9.3 global.md 的内容范围
+### 9.4 各层内容范围
 
-- 这个系统是什么、为什么存在(简短)
-- 不可违反的硬约束：source 必须走 PR、frontmatter 必须完整、依赖用 `deps.py` 算、每个 PR 一个 source 文件
-- agent 的身份：你是 OS 的 operating agent，你的判断质量决定系统质量
-- 出错时的 fallback：不确定就停下来产 `unsure` 类型的 PR 描述困惑
+**invariants.md** (~50 行, 只放"两种模式下都必须守"的东西):
 
-### 9.4 events/*.md 的内容范围
+- Agent 身份 (双角色: 日常协作助手 + OS operator)
+- 写权边界: 禁写路径 / 条件可写 / 直写区 / 其余走 PR
+- Frontmatter kind 约定 (source / derived / system + 无 frontmatter 默认)
+- 外部事实必须 fresh ground
+- 出错时 fallback (高层判断, 细节在 skill 里)
+- OS operator skill 的触发词与入口
 
-每份 event 文件包含：
+**os-operator.md** (skill, ~250-300 行, 只放 procedure):
 
-- 触发条件(哪些路径会产生这类事件)
-- 处理流程(按步骤)
-- 评估维度(agent 判断时考虑什么)
-- 允许改的文件清单
-- 不允许改的文件清单
-- 成功和失败的结束标记怎么写
+- Triggers 清单 (显式词 + 隐式触发条件)
+- Monitor 流程 (8 步)
+- 依赖传播链 (source → triage → section → sp → view)
+- PR 硬约束 (每 PR 一 source、下游 rebuild、commit trailer、visibility triage 触发)
+- Inbox 状态机 + 删除约定
+- PR 交付与 review 流程 + 7 节 review 模板
+- Advisory PR (禁写区 extract 出口)
+- Comment 往返机制 + round >= 3 喊停
+- Squash merge 语义
+- MVP 覆盖的 event_type 清单
+- Benchmark 触发条件与流程
+- 指向 references/ 下各 procedure / decision rule 的清单
+
+**references/events/\*.md** (每份事件文件):
+
+- 触发条件 (哪些路径 / 哪些 event_type 产生这类事件)
+- 处理流程 (按步骤)
+- 评估维度 (agent 判断时考虑什么)
+- 允许改 / 不允许改的文件清单 (事件特定的, 不是全局的——全局在 invariants)
+- 成功 / 失败的结束标记
 - Commit message 模板
 
-### 9.5 为什么不用 YAML schema
+**references/{visibility-triage, section-rebuild, sp-rebuild, view-rebuild}.md** 各自是一份独立 procedure 或 decision rule, 被 os-operator skill 或 events 文件显式调用。
 
-因为 guideline 的灵魂是"灵活的 convention，由 agent 自由判断"，不是"硬编码的规则，由代码强制执行"。用 YAML 会把它变成半程序半规范的混合物，失去 agent 做判断的空间。
+### 9.5 为什么这么切
 
-agent 可能偶尔越界，这是成本。修复方法是改 guideline 或在 Claude Code 的 permission 机制里加限制，不是把 guideline 本身变成程序。
+- **invariant / procedure / decision rule 三分**是按"何时进入 agent 注意力"切, 不是按"规则严重性"切。严重的也可以是 procedure (例如 advisory PR 流程), 不严重的也可以是 invariant (frontmatter 默认值)
+- **skill 独立于 `06 system/`**: 规则自己的演化和复用节奏, 不绑到 control plane
+- **events/ 是 reference 不是 procedure**: 事件规则是"per-event 的分派细节", 由 os-operator skill 显式调用, 不是独立触发的 procedure
+
+### 9.6 为什么不用 YAML schema
+
+因为 guideline 的灵魂是"灵活的 convention, 由 agent 自由判断", 不是"硬编码的规则, 由代码强制执行"。用 YAML 会把它变成半程序半规范的混合物, 失去 agent 做判断的空间。
+
+agent 可能偶尔越界, 这是成本。修复方法是改 guideline 或在 Claude Code 的 permission 机制里加限制, 不是把 guideline 本身变成程序。
 
 ## 10. 外层代码 vs 内层 agent
 
@@ -636,9 +702,13 @@ agent 可能偶尔越界，这是成本。修复方法是改 guideline 或在 Cl
 
 ### 12.1 guideline 膨胀
 
-当事件类型增多时，`global.md + events/*.md` 的总字数会膨胀。单个 event 文件不会太长(per-event 隔离)，但 `global.md` 容易成为"所有 event 的共同知识仓库"，慢慢变长。
+当事件类型增多时，`invariants + os-operator skill + references/events/*.md` 的总字数会膨胀。单个 event 文件不会太长 (per-event 隔离)，但 `os-operator.md` (skill) 和 `invariants.md` 都有变成"所有事件共同知识仓库"的倾向。
 
-**监控**：每月检查 `global.md` 行数，超过 300 行时强制重构。
+**监控**：每月检查三层行数上限 ——
+
+- `invariants.md` 超过 80 行 → 强制重构 (常载成本敏感)
+- `os-operator.md` (skill) 超过 400 行 → 考虑把稳定的 procedure block 下沉成独立 reference 文件
+- 单个 `references/events/*.md` 超过 300 行 → 拆子 event 或抽 shared procedure
 
 ### 12.2 agent 误判产生的污染
 

@@ -33,7 +33,7 @@ python3 -m http.server 8126 --bind 127.0.0.1 -d site
 **Agent-first model:**
 - Agent (Codex) is the primary orchestrator, monitoring the OS daily
 - Scripts (`watch.py`, `deps.py`, `approve.py`) are deterministic tools called by the agent or human
-- Agent reads `system/operating rule/global.md + events/<type>.md` as processing guidelines
+- Agent loads rules in three layers: `system/operating rule/invariants.md` (always-on), `assist/learn and improve/skill/os-operator.md` (trigger-loaded procedure), `system/operating rule/references/events/<type>.md` (dispatched per event); see design §9
 
 **Three actors, no overlap:**
 - **Human**: controls review gate (approve / reject / request-changes)
